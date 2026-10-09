@@ -1,0 +1,17 @@
+{
+  "name": "ittikar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "smoke": "playwright test tests/TC-REG-001.spec.js tests/TC-REG-033.spec.js tests/TC-REG-044.spec.js --project=chromium --workers=1 --headed"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.7"
+  }
+}
