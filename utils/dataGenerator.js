@@ -30,3 +30,24 @@ export function generateUniqueOrgRegNo() {
 export function generateRandomCountry() {
   return COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
 }
+
+const DEAL_ADJECTIVES = [
+  'Summit', 'Horizon', 'Granite', 'Meridian', 'Atlas', 'Pinnacle', 'Crestview', 'Vertex', 'Nova', 'Zenith',
+];
+const DEAL_NOUNS = [
+  'Growth', 'Income', 'Yield', 'Legacy', 'Momentum', 'Frontier', 'Compass', 'Anchor',
+];
+
+function generateDealName(kind) {
+  const adjective = DEAL_ADJECTIVES[Math.floor(Math.random() * DEAL_ADJECTIVES.length)];
+  const noun = DEAL_NOUNS[Math.floor(Math.random() * DEAL_NOUNS.length)];
+  return `${adjective} ${noun} ${kind} ${Date.now()}`;
+}
+
+export function generatePortfolioName() {
+  return generateDealName('Portfolio');
+}
+
+export function generateOpportunityName() {
+  return generateDealName('Opportunity');
+}

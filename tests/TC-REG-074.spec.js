@@ -31,6 +31,7 @@ test('TC-REG-074', async ({ page }) => {
   await page.getByRole('button', { name: 'Not now' }).click({ timeout: 5000 }).catch(() => {});
 
   await page.getByRole('button', { name: 'Self-Service Onboarding' }).click();
+  await page.getByRole('button', { name: 'Onboard independently, at' }).click();
 
   await expect(
     page.getByText('Would you like to proceed with Self-Service Onboarding?')
