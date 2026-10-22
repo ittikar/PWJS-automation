@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { LoginPage } from '../pages/loginpage.page';
+import { DashboardPage } from '../pages/dashboardpage.page';
+import { OnboardingChatPage } from '../pages/onboardingchatpage.page';
 
 const LOGIN_URL = 'https://sit-ireland-dashboard.ittikar.com/login';
 
@@ -21,19 +23,28 @@ test('TC-REG-074', async ({ page }) => {
   }
 
   const loginPage = new LoginPage(page);
+  const dashboardPage = new DashboardPage(page);
+  const onboardingChatPage = new OnboardingChatPage(page);
 
   await loginPage.goto(LOGIN_URL);
   await loginPage.login(user.email, user.password);
 
-  await page.waitForURL(url => url.pathname.startsWith('/itti'), { timeout: 45000 });
+  await dashboardPage.waitForLoad();
+  await dashboardPage.dismissQuickTour();
 
-  // Dismiss the first-login "Quick tour" prompt if it appears. 
-  await page.getByRole('button', { name: 'Not now' }).click({ timeout: 5000 }).catch(() => {});
+  // The two onboarding paths are offered before picking one.
+  await expect(dashboardPage.selfServiceOnboardingBtn).toBeVisible();
+  await expect(dashboardPage.assistedOnboardingBtn).toBeVisible();
 
-  await page.getByRole('button', { name: 'Self-Service Onboarding' }).click();
-  await page.getByRole('button', { name: 'Onboard independently, at' }).click();
+  await onboardingChatPage.startSelfServiceOnboarding();
 
-  await expect(
-    page.getByText('Would you like to proceed with Self-Service Onboarding?')
-  ).toBeVisible({ timeout: 45000 });
+  let formVisible = await onboardingChatPage.isAumFormVisible(45000);
+  if (!formVisible) {
+    // Itti's first reply is sometimes just a conversational confirmation step rather than
+    // the form itself; clicking the same entry point again can push it to render the form.
+    await onboardingChatPage.retryProceed();
+    formVisible = await onboardingChatPage.isAumFormVisible(45000);
+  }
+
+  expect(formVisible, 'AUM form (currency, AUM Lower Limit, AUM Upper Limit) should be visible').toBe(true);
 });

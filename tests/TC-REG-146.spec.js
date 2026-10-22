@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
 import { LoginPage } from '../pages/loginpage.page';
+import { DashboardPage } from '../pages/dashboardpage.page';
+import { DealFormPage } from '../pages/dealformpage.page';
 import { generateOpportunityName } from '../utils/dataGenerator';
-import { fillDealDetails, pickRandomFiles } from '../utils/dealForm';
+import { pickRandomFiles } from '../utils/dealForm';
+import { resetDealResults, recordDealResult, assertAllAssetGroupsCovered } from '../utils/dealResults';
+
+const RESULTS_FILE = 'opportunityResults.json';
 
 const LOGIN_URL = 'https://sit-ireland-dashboard.ittikar.com/login';
 
@@ -10,68 +14,87 @@ function opportunityCreateUrl(assetGroupSlug) {
   return `https://sit-ireland-dashboard.ittikar.com/deals/opportunities/create/details?assetGroup=${assetGroupSlug}`;
 }
 
-const ROOT_USER = {
-  email: 'yoprutettokau-3986@yopmail.com',
-  password: 'Qwerty@123',
-};
-
-const ASSET_GROUPS = [
-  { slug: 'private-equity', label: 'Private Equity' },
-  { slug: 'real-asset', label: 'Real Asset' },
-  { slug: 'secondary-pre-ipo', label: 'Secondary & Pre-IPO' },
-  { slug: 'private-credit', label: 'Private Credit' },
-  { slug: 'other-alternatives', label: 'Other Alternatives' },
+const ROOT_USER = { email: 'jebrummadewi-6237@yopmail.com', password: 'Qwerty@123' };
+const ASSET_GROUP_SLUGS = [
+  'private-equity',
+  'real-asset',
+  'secondary-pre-ipo',
+  'private-credit',
+  'other-alternatives',
 ];
 
-for (const { slug, label } of ASSET_GROUPS) {
-  test(`TC-REG-146 - ${label}`, async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.goto(LOGIN_URL);
-    await loginPage.login(ROOT_USER.email, ROOT_USER.password);
-
-    await page.waitForURL(url => url.pathname.startsWith('/itti'), { timeout: 45000 });
-
-    // Dismiss the first-login "Quick tour" prompt if it appears.
-    await page.getByRole('button', { name: 'Not now' }).click({ timeout: 5000 }).catch(() => {});
-
-    // Opportunity 1: save as a draft.
-    await page.goto(opportunityCreateUrl(slug));
-    await fillDealDetails(page, generateOpportunityName());
-    await page.getByRole('button', { name: 'Save as Draft' }).click();
-
-    await expect(page.getByText('Your opportunity has been saved as a draft.')).toBeVisible({ timeout: 15000 });
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
-
-    // Opportunity 2: save (not as a draft), upload documents, and submit it fully.
-    await page.goto(opportunityCreateUrl(slug));
-    await fillDealDetails(page, generateOpportunityName());
-    await page.getByRole('button', { name: 'Save & Continue' }).click();
-
-    await expect(page).toHaveURL(/\/documents\?flow=create/, { timeout: 15000 });
-
-    // The Data Room widget can get stuck on "LOADING DATA ROOM…" after the create-flow
-    // transition; a reload reliably gets it to render its upload categories.
-    await page.reload({ waitUntil: 'networkidle' });
-
-    const [file1, file2] = pickRandomFiles(2);
-    await page.locator('input[type="file"]').first().setInputFiles([file1, file2]);
-
-    // The upload progress indicator is transient, so wait for the filenames themselves
-    // (which persist both during and after upload) and then for the percentage indicators
-    // to clear, which is how this widget signals that uploads have actually finished.
-    await expect(page.getByText(path.basename(file1))).toBeVisible({ timeout: 30000 });
-    await expect(page.getByText(path.basename(file2))).toBeVisible({ timeout: 30000 });
-    await expect(page.getByText('100%')).toHaveCount(0, { timeout: 30000 });
-
-    await page.getByRole('button', { name: 'Submit', exact: true }).click();
-
-    await expect(page.getByText('Submit opportunity?')).toBeVisible({ timeout: 10000 });
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
-
-    await expect(page.getByText('Your opportunity has been submitted successfully.')).toBeVisible({
+async function createOpportunityPair(dealFormPage, slug) {
+  // Opportunity 1: save as a draft.
+  const draftName = generateOpportunityName();
+  await dealFormPage.withPageRetry(opportunityCreateUrl(slug), async () => {
+    await dealFormPage.fillDealDetails(draftName);
+    await dealFormPage.saveAsDraft();
+    await expect(dealFormPage.page.getByText('Your opportunity has been saved as a draft.')).toBeVisible({
       timeout: 15000,
     });
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
   });
+  await dealFormPage.dismissConfirmationModal();
+
+  // Opportunity 2: save (not as a draft), upload documents, and submit it fully.
+  const submittedName = generateOpportunityName();
+  await dealFormPage.withPageRetry(opportunityCreateUrl(slug), async () => {
+    await dealFormPage.fillDealDetails(submittedName);
+    await dealFormPage.saveAndContinue();
+    await expect(dealFormPage.page).toHaveURL(/\/documents\?flow=create/, { timeout: 15000 });
+  });
+
+  await dealFormPage.reloadDataRoom();
+
+  const files = pickRandomFiles(2);
+  await dealFormPage.uploadFiles(files);
+  await dealFormPage.waitForUploadsComplete(files);
+
+  await dealFormPage.submit();
+
+  await expect(dealFormPage.page.getByText('Submit opportunity?')).toBeVisible({ timeout: 10000 });
+  await dealFormPage.dismissConfirmationModal();
+
+  await expect(dealFormPage.page.getByText('Your opportunity has been submitted successfully.')).toBeVisible({
+    timeout: 15000,
+  });
+  await dealFormPage.dismissConfirmationModal();
+
+  return { draftName, submittedName };
 }
+
+test('TC-REG-146', async ({ page }) => {
+  // This test does a single login followed by 5 full asset-group create+submit cycles,
+  // which comfortably exceeds the project's 90s default test timeout even on a clean run.
+  test.setTimeout(300000);
+
+  const loginPage = new LoginPage(page);
+  const dashboardPage = new DashboardPage(page);
+  const dealFormPage = new DealFormPage(page);
+
+  await loginPage.goto(LOGIN_URL);
+  await loginPage.login(ROOT_USER.email, ROOT_USER.password);
+
+  await dashboardPage.waitForLoad();
+  await dashboardPage.dismissQuickTour();
+
+  resetDealResults(RESULTS_FILE);
+
+  // Processed one at a time, in a single session: running these concurrently (e.g. as
+  // separate Playwright tests under this project's fullyParallel config) means multiple
+  // workers logging into this same shared account at once, which causes cross-test UI
+  // interference on the backend -- a failure on one asset class that has nothing to do
+  // with that asset class itself. A single sequential loop removes that risk entirely,
+  // and each iteration's own try/catch keeps one asset class's failure from blocking
+  // the rest.
+  for (const slug of ASSET_GROUP_SLUGS) {
+    try {
+      const { draftName, submittedName } = await createOpportunityPair(dealFormPage, slug);
+      recordDealResult(RESULTS_FILE, slug, { dealType: 'opportunity', status: 'SUCCESS', draftName, submittedName });
+    } catch (err) {
+      recordDealResult(RESULTS_FILE, slug, { dealType: 'opportunity', status: 'FAILED', error: err.message });
+    }
+  }
+
+  // Confirm an opportunity was actually created for every asset class, not just that the loop ran.
+  assertAllAssetGroupsCovered(RESULTS_FILE, ASSET_GROUP_SLUGS);
+});

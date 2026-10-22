@@ -1,0 +1,37 @@
+[
+  {
+    "assetGroup": "private-equity",
+    "dealType": "clubDeal",
+    "status": "SUCCESS",
+    "draftName": "Summit Momentum Club Deal 1792641711895",
+    "timestamp": "2026-10-22T04:01:55.892Z"
+  },
+  {
+    "assetGroup": "real-asset",
+    "dealType": "clubDeal",
+    "status": "SUCCESS",
+    "draftName": "Horizon Legacy Club Deal 1792641715894",
+    "timestamp": "2026-10-22T04:01:59.386Z"
+  },
+  {
+    "assetGroup": "secondary-pre-ipo",
+    "dealType": "clubDeal",
+    "status": "SUCCESS",
+    "draftName": "Atlas Growth Club Deal 1792641719387",
+    "timestamp": "2026-10-22T04:02:02.866Z"
+  },
+  {
+    "assetGroup": "private-credit",
+    "dealType": "clubDeal",
+    "status": "SUCCESS",
+    "draftName": "Crestview Yield Club Deal 1792641722866",
+    "timestamp": "2026-10-22T04:02:06.604Z"
+  },
+  {
+    "assetGroup": "other-alternatives",
+    "dealType": "clubDeal",
+    "status": "SUCCESS",
+    "draftName": "Granite Legacy Club Deal 1792641726605",
+    "timestamp": "2026-10-22T04:02:10.441Z"
+  }
+]

@@ -51,3 +51,7 @@ export function generatePortfolioName() {
 export function generateOpportunityName() {
   return generateDealName('Opportunity');
 }
+
+export function generateClubDealName() {
+  return generateDealName('Club Deal');
+}

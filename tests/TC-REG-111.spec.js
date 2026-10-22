@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginpage.page';
+import { DashboardPage } from '../pages/dashboardpage.page';
+import { UsersPage } from '../pages/userspage.page';
 
 const LOGIN_URL = 'https://sit-ireland-dashboard.ittikar.com/login';
 
@@ -8,49 +10,30 @@ const ROOT_USER = {
   password: 'Qwerty@123',
 };
 
-async function inviteUser(page, { firstName, lastName, email, role }) {
-  await page.getByRole('button', { name: 'Add User', exact: true }).click();
-
-  await page.locator('input[name="first_name"]').fill(firstName);
-  await page.locator('input[name="last_name"]').fill(lastName);
-  await page.locator('input[name="email"]').fill(email);
-
-  await page.getByRole('combobox').click();
-  await page.getByRole('option', { name: role, exact: true }).click();
-
-  await page.getByRole('button', { name: 'Add User', exact: true }).last().click();
-
-  await expect(
-    page.getByText('The member has been successfully added. Temporary credentials have been emailed to them.')
-  ).toBeVisible({ timeout: 15000 });
-}
-
 test('TC-REG-111', async ({ page }) => {
   const loginPage = new LoginPage(page);
+  const dashboardPage = new DashboardPage(page);
+  const usersPage = new UsersPage(page);
 
   await loginPage.goto(LOGIN_URL);
   await loginPage.login(ROOT_USER.email, ROOT_USER.password);
 
-  await page.waitForURL(url => url.pathname.startsWith('/itti'), { timeout: 45000 });
-
-  // Dismiss the first-login "Quick tour" prompt if it appears.
-  await page.getByRole('button', { name: 'Not now' }).click({ timeout: 5000 }).catch(() => {});
-
-  await page.getByRole('link', { name: 'Users' }).click();
-  await page.waitForURL(url => url.pathname === '/users', { timeout: 15000 });
+  await dashboardPage.waitForLoad();
+  await dashboardPage.dismissQuickTour();
+  await dashboardPage.goToUsers();
 
   const timestamp = Date.now();
   const normalUserEmail = `normal.user.${timestamp}@yopmail.com`;
   const adminUserEmail = `admin.user.${timestamp}@yopmail.com`;
 
-  await inviteUser(page, {
+  await usersPage.inviteUser({
     firstName: 'Normal',
     lastName: 'User',
     email: normalUserEmail,
     role: 'Normal',
   });
 
-  await inviteUser(page, {
+  await usersPage.inviteUser({
     firstName: 'Admin',
     lastName: 'User',
     email: adminUserEmail,

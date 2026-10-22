@@ -1,0 +1,42 @@
+[
+  {
+    "assetGroup": "private-equity",
+    "dealType": "portfolio",
+    "status": "SUCCESS",
+    "draftName": "Vertex Yield Portfolio 1792641698847",
+    "submittedName": "Crestview Compass Portfolio 1792641702976",
+    "timestamp": "2026-10-22T04:01:56.136Z"
+  },
+  {
+    "assetGroup": "real-asset",
+    "dealType": "portfolio",
+    "status": "SUCCESS",
+    "draftName": "Meridian Momentum Portfolio 1792641716137",
+    "submittedName": "Zenith Growth Portfolio 1792641720020",
+    "timestamp": "2026-10-22T04:02:11.475Z"
+  },
+  {
+    "assetGroup": "secondary-pre-ipo",
+    "dealType": "portfolio",
+    "status": "SUCCESS",
+    "draftName": "Nova Legacy Portfolio 1792641731475",
+    "submittedName": "Pinnacle Income Portfolio 1792641735412",
+    "timestamp": "2026-10-22T04:02:27.020Z"
+  },
+  {
+    "assetGroup": "private-credit",
+    "dealType": "portfolio",
+    "status": "SUCCESS",
+    "draftName": "Meridian Momentum Portfolio 1792641747020",
+    "submittedName": "Atlas Income Portfolio 1792641750168",
+    "timestamp": "2026-10-22T04:02:41.446Z"
+  },
+  {
+    "assetGroup": "other-alternatives",
+    "dealType": "portfolio",
+    "status": "SUCCESS",
+    "draftName": "Crestview Momentum Portfolio 1792641761447",
+    "submittedName": "Granite Anchor Portfolio 1792641765312",
+    "timestamp": "2026-10-22T04:02:57.659Z"
+  }
+]

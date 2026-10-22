@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { LoginPage } from '../pages/loginpage.page';
+import { DashboardPage } from '../pages/dashboardpage.page';
 
 const LOGIN_URL = 'https://sit-ireland-dashboard.ittikar.com/login';
 
@@ -14,13 +15,14 @@ function getLatestSuccessfulSignup() {
   return successfulSignups[successfulSignups.length - 1];
 }
 
-test('(TC-REG-033) Login Test - validate dashboard', async ({ page }) => {
+test('(TC-REG-033) Login Test new user - validate dashboard', async ({ page }) => {
   const user = getLatestSuccessfulSignup();
   if (!user) {
     throw new Error('No SUCCESS signup found in signupResults.json');
   }
 
   const loginPage = new LoginPage(page);
+  const dashboardPage = new DashboardPage(page);
 
   await loginPage.goto(LOGIN_URL);
   await loginPage.login(user.email, user.password);
@@ -28,8 +30,7 @@ test('(TC-REG-033) Login Test - validate dashboard', async ({ page }) => {
   // Wait for the post-login redirect rather than the "Good to see you" greeting:
   // that greeting only renders on the account's very first login, so it is not a
   // reliable signal once the account has logged in before (e.g. a prior test run).
-  await page.waitForURL(url => url.pathname.startsWith('/itti'), { timeout: 45000 });
+  await dashboardPage.waitForLoad();
 
-  // Confirm it's the right dashboard for the right user via a signal that renders every login.
-  await expect(page.getByText(user.email, { exact: false }).first()).toBeVisible();
+  await expect(dashboardPage.getUserEmailText(user.email)).toBeVisible();
 });

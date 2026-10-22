@@ -79,7 +79,10 @@ export class SignupPage {
       await inputs[i].fill(digits[i]);
     }
 
-    await this.verifyEmailBtn.click();
+    // Filling the last digit can auto-submit and advance straight to the success dialog
+    // before this click happens, so don't hang waiting for a button that's already gone.
+    await this.verifyEmailBtn.click({ timeout: 5000 }).catch(() => {});
+
     await this.okBtn.click();
   }
 }
