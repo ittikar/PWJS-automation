@@ -14,8 +14,6 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
-  /* Signup flows poll an external mailbox for the OTP, which can take a while; give tests headroom. */
-  timeout: 90000,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -25,10 +23,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  // `open: 'never'` because the default ('on-failure' outside CI) tries to launch a
-  // browser to display the report, which hangs for a long time in this environment
-  // with no display -- that hang was masquerading as mysterious test slowness/hangs.
-  reporter: [['html', { open: 'never' }]],
+  reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -36,6 +31,10 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    /* Screenshot when a test fails */
+    screenshot: 'only-on-failure',
+    /* Record video when retrying the failed test */
+    video: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */

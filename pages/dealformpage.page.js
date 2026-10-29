@@ -14,6 +14,7 @@ export class DealFormPage {
 
     this.saveAsDraftBtn = page.getByRole('button', { name: 'Save as Draft' });
     this.saveAndContinueBtn = page.getByRole('button', { name: 'Save & Continue' });
+    this.skipParticipantsBtn = page.getByRole('button', { name: 'Skip & Continue' });
     this.submitBtn = page.getByRole('button', { name: 'Submit', exact: true });
 
     this.fileInput = page.locator('input[type="file"]').first();
@@ -125,6 +126,12 @@ export class DealFormPage {
 
   async saveAndContinue() {
     await this.saveAndContinueBtn.click({ timeout: 15000 });
+  }
+
+  // Club deal creation has an extra "People and Organisations" step between Deal Details
+  // and Data Room Documents that portfolio/opportunity don't have; this skips it.
+  async skipParticipants() {
+    await this.skipParticipantsBtn.click({ timeout: 15000 });
   }
 
   // The Data Room widget can get stuck on "LOADING DATA ROOM…" after the create-flow

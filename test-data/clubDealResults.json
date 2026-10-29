@@ -3,35 +3,40 @@
     "assetGroup": "private-equity",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Summit Momentum Club Deal 1792641711895",
-    "timestamp": "2026-10-22T04:01:55.892Z"
+    "draftName": "Crestview Anchor Club Deal 1793273679265",
+    "submittedName": "Horizon Compass Club Deal 1793273683010",
+    "timestamp": "2026-10-29T11:34:54.765Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Horizon Legacy Club Deal 1792641715894",
-    "timestamp": "2026-10-22T04:01:59.386Z"
+    "draftName": "Atlas Income Club Deal 1793273694767",
+    "submittedName": "Granite Income Club Deal 1793273698409",
+    "timestamp": "2026-10-29T11:35:12.832Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Atlas Growth Club Deal 1792641719387",
-    "timestamp": "2026-10-22T04:02:02.866Z"
+    "draftName": "Granite Anchor Club Deal 1793273712832",
+    "submittedName": "Summit Yield Club Deal 1793273716410",
+    "timestamp": "2026-10-29T11:35:27.315Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Crestview Yield Club Deal 1792641722866",
-    "timestamp": "2026-10-22T04:02:06.604Z"
+    "draftName": "Summit Anchor Club Deal 1793273727315",
+    "submittedName": "Summit Growth Club Deal 1793273731043",
+    "timestamp": "2026-10-29T11:35:41.509Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Granite Legacy Club Deal 1792641726605",
-    "timestamp": "2026-10-22T04:02:10.441Z"
+    "draftName": "Atlas Income Club Deal 1793273741510",
+    "submittedName": "Granite Income Club Deal 1793273745126",
+    "timestamp": "2026-10-29T11:35:55.876Z"
   }
 ]

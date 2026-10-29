@@ -2,12 +2,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { SignupPage } from '../pages/signuppage.page';
-import {
-  generateUniqueEmail,
-  generateUniqueOrgName,
-  generateUniqueOrgRegNo,
-  generateRandomCountry,
-} from '../utils/dataGenerator';
+import {generateUniqueEmail,generateUniqueOrgName,generateUniqueOrgRegNo,generateRandomCountry,} from '../utils/dataGenerator';
 import { writeSignupResult as writeJsonResult } from '../utils/jsonWriter';
 import { getOtpFromYopmail } from '../utils/otpReader';
 
@@ -59,9 +54,8 @@ test(`Signup Test -TC-REG-001, TC-REG-014, TC-REG-021`, async ({ page }) => {
     writeJsonResult('signupResults.json', result);
 
     await signupPage.goto(LOGIN_URL);
-  } catch (err) {
-    console.log(`Signup failed for ${username}: ${err.message}`);
-  }
+  } 
+  catch (err) {console.log(`Signup failed for ${username}: ${err.message}`);}
 
   expect(status).toBe('SUCCESS');
 });

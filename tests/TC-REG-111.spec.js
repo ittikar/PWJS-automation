@@ -6,7 +6,7 @@ import { UsersPage } from '../pages/userspage.page';
 const LOGIN_URL = 'https://sit-ireland-dashboard.ittikar.com/login';
 
 const ROOT_USER = {
-  email: 'yoprutettokau-3986@yopmail.com',
+  email: 'sasottijotro-8363@yopmail.com',
   password: 'Qwerty@123',
 };
 

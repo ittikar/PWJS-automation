@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "smoke": "playwright test tests/TC-REG-001.spec.js tests/TC-REG-033.spec.js tests/TC-REG-044.spec.js --project=chromium --workers=1 --headed"
+    "regression": "playwright test tests/TC-REG-001.spec.js tests/TC-REG-033.spec.js tests/TC-REG-044.spec.js tests/TC-REG-074.spec.js tests/TC-REG-111.spec.js tests/TC-REG-134.spec.js tests/TC-REG-146.spec.js tests/TC-REG-168.spec.js --project=chromium --workers=1 --retries=1 --headed"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^25.0.7"
   }
 }

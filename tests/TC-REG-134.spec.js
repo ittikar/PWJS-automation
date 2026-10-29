@@ -14,7 +14,7 @@ function portfolioCreateUrl(assetGroupSlug) {
   return `https://sit-ireland-dashboard.ittikar.com/deals/portfolios/create/details?assetGroup=${assetGroupSlug}`;
 }
 
-const ROOT_USER = { email: 'jebrummadewi-6237@yopmail.com', password: 'Qwerty@123' };
+const ROOT_USER = { email: 'sasottijotro-8363@yopmail.com', password: 'Qwerty@123' };
 const ASSET_GROUP_SLUGS = [
   'private-equity',
   'real-asset',

@@ -3,40 +3,40 @@
     "assetGroup": "private-equity",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Vertex Yield Portfolio 1792641698847",
-    "submittedName": "Crestview Compass Portfolio 1792641702976",
-    "timestamp": "2026-10-22T04:01:56.136Z"
+    "draftName": "Zenith Yield Portfolio 1793273683602",
+    "submittedName": "Nova Anchor Portfolio 1793273687082",
+    "timestamp": "2026-10-29T11:34:58.333Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Meridian Momentum Portfolio 1792641716137",
-    "submittedName": "Zenith Growth Portfolio 1792641720020",
-    "timestamp": "2026-10-22T04:02:11.475Z"
+    "draftName": "Atlas Anchor Portfolio 1793273698336",
+    "submittedName": "Atlas Yield Portfolio 1793273701869",
+    "timestamp": "2026-10-29T11:35:12.710Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Nova Legacy Portfolio 1792641731475",
-    "submittedName": "Pinnacle Income Portfolio 1792641735412",
-    "timestamp": "2026-10-22T04:02:27.020Z"
+    "draftName": "Nova Yield Portfolio 1793273712711",
+    "submittedName": "Atlas Anchor Portfolio 1793273716267",
+    "timestamp": "2026-10-29T11:35:26.348Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Meridian Momentum Portfolio 1792641747020",
-    "submittedName": "Atlas Income Portfolio 1792641750168",
-    "timestamp": "2026-10-22T04:02:41.446Z"
+    "draftName": "Summit Frontier Portfolio 1793273726349",
+    "submittedName": "Horizon Compass Portfolio 1793273729918",
+    "timestamp": "2026-10-29T11:35:40.531Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Crestview Momentum Portfolio 1792641761447",
-    "submittedName": "Granite Anchor Portfolio 1792641765312",
-    "timestamp": "2026-10-22T04:02:57.659Z"
+    "draftName": "Horizon Momentum Portfolio 1793273740531",
+    "submittedName": "Granite Compass Portfolio 1793273744066",
+    "timestamp": "2026-10-29T11:35:55.733Z"
   }
 ]
