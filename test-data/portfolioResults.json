@@ -3,40 +3,40 @@
     "assetGroup": "private-equity",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Zenith Yield Portfolio 1793273683602",
-    "submittedName": "Nova Anchor Portfolio 1793273687082",
-    "timestamp": "2026-10-29T11:34:58.333Z"
+    "draftName": "Summit Frontier Portfolio 1793363065532",
+    "submittedName": "Pinnacle Income Portfolio 1793363070056",
+    "timestamp": "2026-10-30T12:24:42.081Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Atlas Anchor Portfolio 1793273698336",
-    "submittedName": "Atlas Yield Portfolio 1793273701869",
-    "timestamp": "2026-10-29T11:35:12.710Z"
+    "draftName": "Granite Compass Portfolio 1793363082082",
+    "submittedName": "Summit Frontier Portfolio 1793363085813",
+    "timestamp": "2026-10-30T12:24:57.247Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Nova Yield Portfolio 1793273712711",
-    "submittedName": "Atlas Anchor Portfolio 1793273716267",
-    "timestamp": "2026-10-29T11:35:26.348Z"
+    "draftName": "Zenith Growth Portfolio 1793363097247",
+    "submittedName": "Vertex Yield Portfolio 1793363101011",
+    "timestamp": "2026-10-30T12:25:10.296Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Summit Frontier Portfolio 1793273726349",
-    "submittedName": "Horizon Compass Portfolio 1793273729918",
-    "timestamp": "2026-10-29T11:35:40.531Z"
+    "draftName": "Vertex Yield Portfolio 1793363110297",
+    "submittedName": "Horizon Momentum Portfolio 1793363113980",
+    "timestamp": "2026-10-30T12:25:24.347Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Horizon Momentum Portfolio 1793273740531",
-    "submittedName": "Granite Compass Portfolio 1793273744066",
-    "timestamp": "2026-10-29T11:35:55.733Z"
+    "draftName": "Meridian Anchor Portfolio 1793363124348",
+    "submittedName": "Horizon Anchor Portfolio 1793363128110",
+    "timestamp": "2026-10-30T12:25:37.865Z"
   }
 ]

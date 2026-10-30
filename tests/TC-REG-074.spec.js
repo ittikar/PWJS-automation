@@ -17,6 +17,8 @@ function getLatestSuccessfulSignup() {
 }
 
 test('TC-REG-074', async ({ page }) => {
+  test.setTimeout(300000);
+
   const user = getLatestSuccessfulSignup();
   if (!user) {
     throw new Error('No SUCCESS signup found in signupResults.json');
@@ -38,13 +40,16 @@ test('TC-REG-074', async ({ page }) => {
 
   await onboardingChatPage.startSelfServiceOnboarding();
 
-  let formVisible = await onboardingChatPage.isAumFormVisible(45000);
-  if (!formVisible) {
-    // Itti's first reply is sometimes just a conversational confirmation step rather than
-    // the form itself; clicking the same entry point again can push it to render the form.
-    await onboardingChatPage.retryProceed();
-    formVisible = await onboardingChatPage.isAumFormVisible(45000);
-  }
+  // Itti doesn't always render the form on its first reply, so keep answering positively until it does.
+  const formVisible = await onboardingChatPage.waitForAumFormRespondingPositively();
 
   expect(formVisible, 'AUM form (currency, AUM Lower Limit, AUM Upper Limit) should be visible').toBe(true);
+
+  await onboardingChatPage.fillAumDetails({ lowerLimit: '1M', upperLimit: '10M', currencyCode: 'USD' });
+  await onboardingChatPage.saveAumDetails();
+
+  await expect(onboardingChatPage.aumRangeConfirmation('USD')).toHaveText('AUM Range: 1,000,000 – 10,000,000 USD', {
+    timeout: 30000,
+  });
+  await expect(onboardingChatPage.saveAumBtn).toBeDisabled();
 });

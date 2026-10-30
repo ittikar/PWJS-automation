@@ -3,40 +3,40 @@
     "assetGroup": "private-equity",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Crestview Anchor Club Deal 1793273679265",
-    "submittedName": "Horizon Compass Club Deal 1793273683010",
-    "timestamp": "2026-10-29T11:34:54.765Z"
+    "draftName": "Atlas Growth Club Deal 1793363229987",
+    "submittedName": "Zenith Income Club Deal 1793363233746",
+    "timestamp": "2026-10-30T12:27:27.108Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Atlas Income Club Deal 1793273694767",
-    "submittedName": "Granite Income Club Deal 1793273698409",
-    "timestamp": "2026-10-29T11:35:12.832Z"
+    "draftName": "Vertex Income Club Deal 1793363247108",
+    "submittedName": "Meridian Momentum Club Deal 1793363250841",
+    "timestamp": "2026-10-30T12:27:41.827Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Granite Anchor Club Deal 1793273712832",
-    "submittedName": "Summit Yield Club Deal 1793273716410",
-    "timestamp": "2026-10-29T11:35:27.315Z"
+    "draftName": "Nova Momentum Club Deal 1793363261827",
+    "submittedName": "Horizon Yield Club Deal 1793363265612",
+    "timestamp": "2026-10-30T12:27:55.927Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Summit Anchor Club Deal 1793273727315",
-    "submittedName": "Summit Growth Club Deal 1793273731043",
-    "timestamp": "2026-10-29T11:35:41.509Z"
+    "draftName": "Crestview Income Club Deal 1793363275928",
+    "submittedName": "Zenith Compass Club Deal 1793363279745",
+    "timestamp": "2026-10-30T12:28:11.076Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Atlas Income Club Deal 1793273741510",
-    "submittedName": "Granite Income Club Deal 1793273745126",
-    "timestamp": "2026-10-29T11:35:55.876Z"
+    "draftName": "Pinnacle Momentum Club Deal 1793363291076",
+    "submittedName": "Crestview Compass Club Deal 1793363295128",
+    "timestamp": "2026-10-30T12:28:25.962Z"
   }
 ]

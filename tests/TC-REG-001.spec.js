@@ -15,6 +15,8 @@ const user = signupData[0];
 // In test suite -> TC-REG-001, TC-REG-014, TC-REG-021
 
 test(`Signup Test -TC-REG-001, TC-REG-014, TC-REG-021`, async ({ page }) => {
+  test.setTimeout(300000);
+
   const signupPage = new SignupPage(page);
 
   const email = generateUniqueEmail();

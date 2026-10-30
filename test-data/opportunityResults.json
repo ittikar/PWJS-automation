@@ -3,40 +3,40 @@
     "assetGroup": "private-equity",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Zenith Yield Opportunity 1793273676695",
-    "submittedName": "Nova Yield Opportunity 1793273680449",
-    "timestamp": "2026-10-29T11:34:51.735Z"
+    "draftName": "Atlas Anchor Opportunity 1793363149397",
+    "submittedName": "Crestview Growth Opportunity 1793363153710",
+    "timestamp": "2026-10-30T12:26:05.245Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Income Opportunity 1793273691736",
-    "submittedName": "Pinnacle Compass Opportunity 1793273695310",
-    "timestamp": "2026-10-29T11:35:05.352Z"
+    "draftName": "Zenith Legacy Opportunity 1793363165246",
+    "submittedName": "Summit Legacy Opportunity 1793363168279",
+    "timestamp": "2026-10-30T12:26:18.546Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Granite Compass Opportunity 1793273705352",
-    "submittedName": "Zenith Legacy Opportunity 1793273709065",
-    "timestamp": "2026-10-29T11:35:19.261Z"
+    "draftName": "Atlas Yield Opportunity 1793363178546",
+    "submittedName": "Pinnacle Momentum Opportunity 1793363182195",
+    "timestamp": "2026-10-30T12:26:31.747Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Meridian Income Opportunity 1793273719261",
-    "submittedName": "Pinnacle Frontier Opportunity 1793273722104",
-    "timestamp": "2026-10-29T11:35:32.126Z"
+    "draftName": "Crestview Legacy Opportunity 1793363191748",
+    "submittedName": "Pinnacle Compass Opportunity 1793363194758",
+    "timestamp": "2026-10-30T12:26:44.520Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Pinnacle Growth Opportunity 1793273732127",
-    "submittedName": "Pinnacle Momentum Opportunity 1793273735698",
-    "timestamp": "2026-10-29T11:35:46.881Z"
+    "draftName": "Atlas Anchor Opportunity 1793363204520",
+    "submittedName": "Granite Anchor Opportunity 1793363208194",
+    "timestamp": "2026-10-30T12:26:58.325Z"
   }
 ]
