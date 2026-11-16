@@ -3,40 +3,50 @@
     "assetGroup": "private-equity",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Atlas Growth Club Deal 1793363229987",
-    "submittedName": "Zenith Income Club Deal 1793363233746",
-    "timestamp": "2026-10-30T12:27:27.108Z"
+    "draftName": "Nova Legacy Club Deal 1794804964932",
+    "submittedName": "Zenith Frontier Club Deal 1794804968642",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:56:25.691Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Vertex Income Club Deal 1793363247108",
-    "submittedName": "Meridian Momentum Club Deal 1793363250841",
-    "timestamp": "2026-10-30T12:27:41.827Z"
+    "draftName": "Crestview Frontier Club Deal 1794804985691",
+    "submittedName": "Zenith Momentum Club Deal 1794804989394",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:56:44.236Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Nova Momentum Club Deal 1793363261827",
-    "submittedName": "Horizon Yield Club Deal 1793363265612",
-    "timestamp": "2026-10-30T12:27:55.927Z"
+    "draftName": "Horizon Growth Club Deal 1794805004237",
+    "submittedName": "Crestview Momentum Club Deal 1794805008029",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:57:03.543Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Crestview Income Club Deal 1793363275928",
-    "submittedName": "Zenith Compass Club Deal 1793363279745",
-    "timestamp": "2026-10-30T12:28:11.076Z"
+    "draftName": "Crestview Growth Club Deal 1794805023543",
+    "submittedName": "Horizon Yield Club Deal 1794805027331",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:57:22.286Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "clubDeal",
     "status": "SUCCESS",
-    "draftName": "Pinnacle Momentum Club Deal 1793363291076",
-    "submittedName": "Crestview Compass Club Deal 1793363295128",
-    "timestamp": "2026-10-30T12:28:25.962Z"
+    "draftName": "Meridian Momentum Club Deal 1794805042287",
+    "submittedName": "Summit Yield Club Deal 1794805046081",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:57:40.565Z"
   }
 ]

@@ -70,6 +70,13 @@ export class SignupPage {
     await this.proceedBtn.click();
   }
 
+  // For entering the OTP by hand: waits while the user types the code into the six boxes (and
+  // clicks Verify Email if the form doesn't submit on its own), then closes the success dialog.
+  async waitForManualEmailVerification(timeout) {
+    await this.okBtn.waitFor({ state: 'visible', timeout });
+    await this.okBtn.click();
+  }
+
   // Complete email verification step by filling the 6 OTP digit boxes
   async verifyEmail(otp) {
     const digits = String(otp).split('');

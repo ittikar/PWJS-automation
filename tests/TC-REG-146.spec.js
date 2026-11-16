@@ -1,10 +1,13 @@
 import { test, expect } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
 import { LoginPage } from '../pages/loginpage.page';
 import { DashboardPage } from '../pages/dashboardpage.page';
 import { DealFormPage } from '../pages/dealformpage.page';
+import { DealSearchPage } from '../pages/dealsearchpage.page';
 import { generateOpportunityName } from '../utils/dataGenerator';
 import { pickRandomFiles } from '../utils/dealForm';
-import { resetDealResults, recordDealResult, assertAllAssetGroupsCovered } from '../utils/dealResults';
+import { resetDealResults, recordDealResult, assertAllAssetGroupsCovered, logCreatedDeals } from '../utils/dealResults';
 
 const RESULTS_FILE = 'opportunityResults.json';
 
@@ -14,7 +17,13 @@ function opportunityCreateUrl(assetGroupSlug) {
   return `https://sit-ireland-dashboard.ittikar.com/deals/opportunities/create/details?assetGroup=${assetGroupSlug}`;
 }
 
-const ROOT_USER = { email: 'sasottijotro-8363@yopmail.com', password: 'Qwerty@123' };
+// The asset group's own opportunity listing, where the created deals should show up.
+function opportunityListingUrl(assetGroupSlug) {
+  return `https://sit-ireland-dashboard.ittikar.com/deals/${assetGroupSlug}/opportunities`;
+}
+
+// Login used to create the deals -- change the email/password in test-data/dealUser.json.
+const ROOT_USER = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'test-data', 'dealUser.json'), 'utf8'));
 const ASSET_GROUP_SLUGS = [
   'private-equity',
   'real-asset',
@@ -33,6 +42,7 @@ async function createOpportunityPair(dealFormPage, slug) {
       timeout: 15000,
     });
   });
+  await dealFormPage.expectSavedInAssetGroup(slug);
   await dealFormPage.dismissConfirmationModal();
 
   // Opportunity 2: save (not as a draft), upload documents, and submit it fully.
@@ -42,6 +52,7 @@ async function createOpportunityPair(dealFormPage, slug) {
     await dealFormPage.saveAndContinue();
     await expect(dealFormPage.page).toHaveURL(/\/documents\?flow=create/, { timeout: 15000 });
   });
+  await dealFormPage.expectSavedInAssetGroup(slug);
 
   await dealFormPage.reloadDataRoom();
 
@@ -63,13 +74,15 @@ async function createOpportunityPair(dealFormPage, slug) {
 }
 
 test('TC-REG-146', async ({ page }) => {
-  // This test does a single login followed by 5 full asset-group create+submit cycles,
-  // which comfortably exceeds the project's 90s default test timeout even on a clean run.
-  test.setTimeout(300000);
+  // This test does a single login followed by 5 full asset-group create+submit cycles, each
+  // followed by a search of the listing to confirm both deals show up there (retried when a
+  // deal isn't found yet), which comfortably exceeds the project's default test timeout.
+  test.setTimeout(600000);
 
   const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
   const dealFormPage = new DealFormPage(page);
+  const dealSearchPage = new DealSearchPage(page);
 
   await loginPage.goto(LOGIN_URL);
   await loginPage.login(ROOT_USER.email, ROOT_USER.password);
@@ -89,7 +102,19 @@ test('TC-REG-146', async ({ page }) => {
   for (const slug of ASSET_GROUP_SLUGS) {
     try {
       const { draftName, submittedName } = await createOpportunityPair(dealFormPage, slug);
-      recordDealResult(RESULTS_FILE, slug, { dealType: 'opportunity', status: 'SUCCESS', draftName, submittedName });
+
+      // The confirmation messages alone aren't proof: only count the pair as created once both
+      // deals are actually listed under this asset group, with the expected draft/submitted status.
+      const uiCheck = await dealSearchPage.verifyDealPair(opportunityListingUrl(slug), { draftName, submittedName });
+      recordDealResult(RESULTS_FILE, slug, {
+        dealType: 'opportunity',
+        status: uiCheck.ok ? 'SUCCESS' : 'FAILED',
+        draftName,
+        submittedName,
+        draftStatus: uiCheck.draftStatus,
+        submittedStatus: uiCheck.submittedStatus,
+        error: uiCheck.error,
+      });
     } catch (err) {
       recordDealResult(RESULTS_FILE, slug, { dealType: 'opportunity', status: 'FAILED', error: err.message });
     }
@@ -97,4 +122,5 @@ test('TC-REG-146', async ({ page }) => {
 
   // Confirm an opportunity was actually created for every asset class, not just that the loop ran.
   assertAllAssetGroupsCovered(RESULTS_FILE, ASSET_GROUP_SLUGS);
+  logCreatedDeals(RESULTS_FILE);
 });

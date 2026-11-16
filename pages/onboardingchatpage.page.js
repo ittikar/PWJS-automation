@@ -21,6 +21,26 @@ export class OnboardingChatPage {
     this.aumLowerLimit = page.getByRole('textbox', { name: /AUM Lower Limit/i });
     this.aumUpperLimit = page.getByRole('textbox', { name: /AUM Upper Limit/i });
     this.saveAumBtn = page.getByRole('button', { name: 'Save' });
+
+    this.startVerificationBtn = page.getByRole('button', { name: 'Start Verification' });
+    this.remindMeLaterBtn = page.getByRole('button', { name: 'Remind me later' });
+  }
+
+  // After saving, Itti summarises the AUM and offers "Confirm and Submit" / "Edit Details".
+  // Confirming leads to the "Start Verification" / "Remind me later" prompt; if Itti replies
+  // without it, confirm again in other words. Returns true once the prompt is visible.
+  async confirmAndSubmitAum({ waitPerReplyMs = 45000 } = {}) {
+    const replies = ['Confirm and Submit', 'Yes, please confirm and submit my AUM details.'];
+
+    for (const reply of replies) {
+      await this.sendChatMessage(reply);
+      const prompted = await this.startVerificationBtn
+        .waitFor({ state: 'visible', timeout: waitPerReplyMs })
+        .then(() => true, () => false);
+      if (prompted) return true;
+    }
+
+    return false;
   }
 
   // currencyCode is the ISO code, e.g. 'USD'; options are named like "US USD US Dollar".

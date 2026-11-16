@@ -3,40 +3,50 @@
     "assetGroup": "private-equity",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Anchor Opportunity 1793363149397",
-    "submittedName": "Crestview Growth Opportunity 1793363153710",
-    "timestamp": "2026-10-30T12:26:05.245Z"
+    "draftName": "Crestview Anchor Opportunity 1794804863433",
+    "submittedName": "Nova Legacy Opportunity 1794804867782",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:54:42.757Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Zenith Legacy Opportunity 1793363165246",
-    "submittedName": "Summit Legacy Opportunity 1793363168279",
-    "timestamp": "2026-10-30T12:26:18.546Z"
+    "draftName": "Summit Income Opportunity 1794804882758",
+    "submittedName": "Horizon Legacy Opportunity 1794804886480",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:55:00.498Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Yield Opportunity 1793363178546",
-    "submittedName": "Pinnacle Momentum Opportunity 1793363182195",
-    "timestamp": "2026-10-30T12:26:31.747Z"
+    "draftName": "Atlas Momentum Opportunity 1794804900501",
+    "submittedName": "Crestview Anchor Opportunity 1794804904215",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:55:18.685Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Crestview Legacy Opportunity 1793363191748",
-    "submittedName": "Pinnacle Compass Opportunity 1793363194758",
-    "timestamp": "2026-10-30T12:26:44.520Z"
+    "draftName": "Pinnacle Frontier Opportunity 1794804918685",
+    "submittedName": "Nova Frontier Opportunity 1794804922363",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:55:35.556Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Anchor Opportunity 1793363204520",
-    "submittedName": "Granite Anchor Opportunity 1793363208194",
-    "timestamp": "2026-10-30T12:26:58.325Z"
+    "draftName": "Horizon Frontier Opportunity 1794804935557",
+    "submittedName": "Horizon Income Opportunity 1794804939282",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:55:53.138Z"
   }
 ]

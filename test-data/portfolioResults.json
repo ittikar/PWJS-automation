@@ -3,40 +3,50 @@
     "assetGroup": "private-equity",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Summit Frontier Portfolio 1793363065532",
-    "submittedName": "Pinnacle Income Portfolio 1793363070056",
-    "timestamp": "2026-10-30T12:24:42.081Z"
+    "draftName": "Granite Compass Portfolio 1794804761055",
+    "submittedName": "Horizon Frontier Portfolio 1794804765681",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:53:01.827Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Granite Compass Portfolio 1793363082082",
-    "submittedName": "Summit Frontier Portfolio 1793363085813",
-    "timestamp": "2026-10-30T12:24:57.247Z"
+    "draftName": "Horizon Momentum Portfolio 1794804781830",
+    "submittedName": "Nova Yield Portfolio 1794804785463",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:53:20.440Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Zenith Growth Portfolio 1793363097247",
-    "submittedName": "Vertex Yield Portfolio 1793363101011",
-    "timestamp": "2026-10-30T12:25:10.296Z"
+    "draftName": "Vertex Income Portfolio 1794804800441",
+    "submittedName": "Nova Growth Portfolio 1794804804097",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:53:37.772Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Vertex Yield Portfolio 1793363110297",
-    "submittedName": "Horizon Momentum Portfolio 1793363113980",
-    "timestamp": "2026-10-30T12:25:24.347Z"
+    "draftName": "Pinnacle Yield Portfolio 1794804817773",
+    "submittedName": "Vertex Legacy Portfolio 1794804821464",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:53:54.775Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "portfolio",
     "status": "SUCCESS",
-    "draftName": "Meridian Anchor Portfolio 1793363124348",
-    "submittedName": "Horizon Anchor Portfolio 1793363128110",
-    "timestamp": "2026-10-30T12:25:37.865Z"
+    "draftName": "Crestview Anchor Portfolio 1794804834776",
+    "submittedName": "Horizon Growth Portfolio 1794804838498",
+    "draftStatus": "Draft",
+    "submittedStatus": "Setting Up Data Room",
+    "timestamp": "2026-11-16T04:54:11.641Z"
   }
 ]

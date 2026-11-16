@@ -1,6 +1,20 @@
 import { expect } from '@playwright/test';
 import path from 'path';
 
+// 'private-equity' -> 'PRIVATE_EQUITY', the code the backend uses for asset groups.
+export function assetGroupCodeFor(slug) {
+  return slug.toUpperCase().replace(/-/g, '_');
+}
+
+// Each creation form loads its lookups (asset groups and their asset classes) from
+// /ref-data/<module>: portfolio, opportunity, or club-deal.
+function refDataModuleFor(url) {
+  const { pathname } = new URL(url);
+  if (pathname.startsWith('/deals/portfolios/')) return 'portfolio';
+  if (pathname.startsWith('/deals/opportunities/')) return 'opportunity';
+  return 'club-deal';
+}
+
 // Shared creation form for portfolios, opportunities, and club deals -- they all live at
 // the same field ids regardless of asset group, with club deals adding a few extra fields.
 export class DealFormPage {
@@ -19,6 +33,66 @@ export class DealFormPage {
 
     this.fileInput = page.locator('input[type="file"]').first();
     this.uploadProgressIndicator = page.getByText('100%');
+
+    this.refData = {};
+    this.lastSavedAssetGroupCode = null;
+    page.on('response', response => this.captureResponse(response));
+  }
+
+  async captureResponse(response) {
+    const url = response.url().split('?')[0];
+
+    const refDataModule = url.match(/\/ref-data\/([a-z-]+)$/)?.[1];
+    if (refDataModule) {
+      const data = await response.json().catch(() => null);
+      if (data) this.refData[refDataModule] = data;
+      return;
+    }
+
+    // Creating a deal is a POST to /deal-onboarding/<type>-compliance; the response carries
+    // the asset group the backend filed it under.
+    if (response.request().method() === 'POST' && /\/deal-onboarding\/[a-z-]+-compliance$/.test(url)) {
+      const body = await response.text().catch(() => '');
+      this.lastSavedAssetGroupCode = body.match(/"assetGroupCode"\s*:\s*"([A-Z_]+)"/)?.[1] ?? null;
+    }
+  }
+
+  // The backend derives a deal's asset group from its asset class (the URL's assetGroup
+  // only drives the UI), so this confirms the deal just saved landed in the intended group.
+  async expectSavedInAssetGroup(slug) {
+    await expect
+      .poll(() => this.lastSavedAssetGroupCode, { message: `Deal should be saved under ${slug}`, timeout: 10000 })
+      .toBe(assetGroupCodeFor(slug));
+  }
+
+  // Right after load, the Asset Class dropdown briefly offers a placeholder list (a short
+  // generic one, or every group's classes) before narrowing to this page's asset group.
+  // A random pick from that early list files the deal under some other group, so wait until
+  // the offered options are exactly this group's classes (per the form's own ref-data).
+  async selectAssetClass(timeout = 20000) {
+    const pageUrl = this.page.url();
+    const groupCode = assetGroupCodeFor(new URL(pageUrl).searchParams.get('assetGroup'));
+    const module = refDataModuleFor(pageUrl);
+    const combobox = this.page.locator('#assetClass');
+    const options = this.page.getByRole('option');
+
+    await expect(async () => {
+      const group = this.refData[module]?.lookups?.assetGroup?.items?.find(item => item.code === groupCode);
+      if (!group) throw new Error(`Asset classes for ${groupCode} not loaded yet`);
+      const expected = new Set(group.assetClass.filter(c => c.uiRender !== false).map(c => c.displayName));
+
+      await combobox.click({ timeout: 5000 });
+      await options.first().waitFor({ state: 'visible', timeout: 3000 });
+      const offered = (await options.allInnerTexts()).map(text => text.split('\n')[0].trim());
+
+      if (offered.length !== expected.size || !offered.every(label => expected.has(label))) {
+        await this.page.keyboard.press('Escape');
+        throw new Error(`Asset Class dropdown not yet narrowed to ${groupCode}`);
+      }
+    }).toPass({ timeout, intervals: [500, 1000] });
+
+    const count = await options.count();
+    await options.nth(Math.floor(Math.random() * count)).click({ timeout: 15000 });
   }
 
   // Navigates to `url` and runs `action`, retrying the whole thing (a fresh navigation,
@@ -78,7 +152,7 @@ export class DealFormPage {
   async fillDealDetails(dealName) {
     await this.dealNameInput.fill(dealName);
 
-    await this.selectRandomOption('assetClass');
+    await this.selectAssetClass();
     await this.selectRandomOption('sector');
     await this.selectRandomOption('natureOfDeal');
 
@@ -97,7 +171,7 @@ export class DealFormPage {
   async fillClubDealDetails(dealName) {
     await this.dealNameInput.fill(dealName);
 
-    await this.selectRandomOption('assetClass');
+    await this.selectAssetClass();
     await this.selectRandomOption('sector');
 
     const targetAmount = (Math.floor(Math.random() * 95) + 5) * 1_000_000; // $5M - $100M
@@ -121,10 +195,12 @@ export class DealFormPage {
   }
 
   async saveAsDraft() {
+    this.lastSavedAssetGroupCode = null;
     await this.saveAsDraftBtn.click({ timeout: 15000 });
   }
 
   async saveAndContinue() {
+    this.lastSavedAssetGroupCode = null;
     await this.saveAndContinueBtn.click({ timeout: 15000 });
   }
 

@@ -58,6 +58,24 @@ export function assertAllAssetGroupsCovered(fileName, expectedAssetGroups) {
   const missing = expectedAssetGroups.filter(group => !succeeded.has(group));
 
   if (missing.length > 0) {
-    throw new Error(`Creation not confirmed for asset group(s): ${missing.join(', ')}`);
+    const details = missing.map(group => {
+      const entry = results.find(r => r.assetGroup === group);
+      return `  - ${group}: ${entry?.error ?? 'no result recorded'}`;
+    });
+    throw new Error(`Creation not confirmed for asset group(s): ${missing.join(', ')}\n${details.join('\n')}`);
   }
+}
+
+// Prints every deal recorded in the consolidated results file, per asset group. Call it after
+// assertAllAssetGroupsCovered, so it only runs once all groups are confirmed.
+export function logCreatedDeals(fileName) {
+  const results = JSON.parse(fs.readFileSync(finalFilePathFor(fileName), 'utf8'));
+  const dealType = results[0]?.dealType ?? fileName.replace(/Results\.json$/, '');
+
+  const lines = [`${dealType}: all ${results.length * 2} deals created`];
+  for (const r of results) {
+    lines.push(`  ${r.assetGroup.padEnd(20)}Draft:     ${r.draftName}`);
+    lines.push(`  ${''.padEnd(20)}Submitted: ${r.submittedName}`);
+  }
+  console.log(lines.join('\n'));
 }

@@ -1,0 +1,22 @@
+{
+  "residence": "All other countries except the one(s) below",
+  "companyEntityType": "Private company",
+  "documents": [
+    { "type": "Incorporation certificate", "file": "dataroom/281.pdf" },
+    { "type": "Shareholder registry", "file": "dataroom/783_00.pdf" },
+    { "type": "Proof of address", "file": "dataroom/ampdf.pdf" },
+    { "type": "Director registry", "file": "dataroom/bg-7-441-2010.pdf" }
+  ],
+  "beneficiary": {
+    "roles": ["UBO", "Shareholder"],
+    "reason": "Owns 25% or more",
+    "ownershipPercentage": "100",
+    "firstName": "Arjun",
+    "lastName": "Mehta",
+    "dateOfBirth": "1985-04-15",
+    "email": "arjun.mehta.kyb@yopmail.com",
+    "phone": "9876543210",
+    "nationality": "India"
+  },
+  "trusteeCannotBeIdentified": true
+}

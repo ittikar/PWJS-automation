@@ -1,0 +1,72 @@
+[
+  {
+    "dealType": "portfolio",
+    "assetGroup": "private-equity",
+    "status": "SUCCESS",
+    "dealName": "ZENITH LEGACY PORTFOLIO 1793965668194",
+    "timestamp": "2026-11-10T10:19:53.618Z"
+  },
+  {
+    "dealType": "portfolio",
+    "assetGroup": "real-asset",
+    "status": "SUCCESS",
+    "dealName": "GRANITE FRONTIER PORTFOLIO 1794294515880",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "portfolio",
+    "assetGroup": "secondary-pre-ipo",
+    "status": "SUCCESS",
+    "dealName": "GRANITE LEGACY PORTFOLIO 1794294534503",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "portfolio",
+    "assetGroup": "private-credit",
+    "status": "SUCCESS",
+    "dealName": "HORIZON GROWTH PORTFOLIO 1794294551808",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "portfolio",
+    "assetGroup": "other-alternatives",
+    "status": "SUCCESS",
+    "dealName": "SUMMIT LEGACY PORTFOLIO 1794294569873",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "opportunity",
+    "assetGroup": "private-equity",
+    "status": "SUCCESS",
+    "dealName": "VERTEX COMPASS OPPORTUNITY 1794294598032",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "opportunity",
+    "assetGroup": "real-asset",
+    "status": "SUCCESS",
+    "dealName": "VERTEX INCOME OPPORTUNITY 1794294617782",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "opportunity",
+    "assetGroup": "secondary-pre-ipo",
+    "status": "SUCCESS",
+    "dealName": "SUMMIT YIELD OPPORTUNITY 1794294635196",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "opportunity",
+    "assetGroup": "private-credit",
+    "status": "SUCCESS",
+    "dealName": "ATLAS YIELD OPPORTUNITY 1794294652552",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  },
+  {
+    "dealType": "opportunity",
+    "assetGroup": "other-alternatives",
+    "status": "SUCCESS",
+    "dealName": "CRESTVIEW MOMENTUM OPPORTUNITY 1793965200501",
+    "timestamp": "2026-11-10T10:19:53.619Z"
+  }
+]

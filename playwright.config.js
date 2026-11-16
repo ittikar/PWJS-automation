@@ -1,5 +1,9 @@
 // @ts-check
+import fs from 'fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// Local secrets (e.g. Sumsub API credentials) live in .env, which git ignores; see .env.example.
+if (fs.existsSync('.env')) process.loadEnvFile('.env');
 
 /**
  * Read environment variables from file.
