@@ -210,6 +210,35 @@ export class DealFormPage {
     await this.skipParticipantsBtn.click({ timeout: 15000 });
   }
 
+  // Adds one participant organisation on the "People and Organisations" step. It is listed with
+  // status "KYB Pending" until its company verification (Sumsub) is done. Returns the
+  // participant as saved by the backend (id, status, complianceProviderId, ...).
+  async addParticipant({ companyName, country, registrationNumber }) {
+    await this.page.getByRole('button', { name: 'Add People and Organisations' }).click({ timeout: 15000 });
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByRole('textbox', { name: 'Company Name*' }).fill(companyName);
+    // The country list only renders the options in view, so type to filter it first.
+    await dialog.getByRole('combobox', { name: 'Country*' }).fill(country);
+    await this.page.getByRole('option', { name: country, exact: true }).click();
+    await dialog.getByRole('textbox', { name: 'Registration No*' }).fill(registrationNumber);
+
+    const saved = this.page.waitForResponse(
+      r => r.request().method() === 'POST' && /\/participants(\?|$)/.test(r.url()),
+      { timeout: 20000 }
+    );
+    await dialog.getByRole('button', { name: 'Save' }).click();
+    const response = await saved;
+    expect(response.ok(), `Saving participant ${companyName}`).toBe(true);
+
+    await expect(this.page.getByRole('heading', { name: companyName })).toBeVisible({ timeout: 15000 });
+    return response.json();
+  }
+
+  // Leaves the "People and Organisations" step once participants have been added.
+  async continueFromParticipants() {
+    await this.page.getByRole('button', { name: 'Continue', exact: true }).click({ timeout: 15000 });
+  }
+
   // The Data Room widget can get stuck on "LOADING DATA ROOM…" after the create-flow
   // transition; a reload reliably gets it to render its upload categories. Bounded and
   // using 'domcontentloaded' rather than 'networkidle' since the Itti chat panel's

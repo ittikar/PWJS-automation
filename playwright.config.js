@@ -58,6 +58,14 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
+    /* Backend tests without a browser: api-tests/*.api.spec.js. Run with `npm run api`. */
+    {
+      name: 'api',
+      testDir: './api-tests',
+      testMatch: /.*\.api\.spec\.js$/,
+      fullyParallel: false,
+    },
+
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',

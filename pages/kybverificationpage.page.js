@@ -47,42 +47,94 @@ export class KybVerificationPage {
     await this.page.getByRole('button', { name: 'Save & Continue' }).click();
   }
 
-  // Intro screen ("Verification for Ittikar"), then country of residence.
+  // Intro screen ("Verification for Ittikar"), then country of residence. The residence screen is
+  // only part of some flows (the organisation's own onboarding has it, a deal participant's
+  // verification doesn't), so it is answered only when it shows.
   async acceptIntro(residence) {
     await expect(this.heading('Verification for Ittikar')).toBeVisible({ timeout: 60000 });
     await this.continueBtn.click();
-    await this.widget.getByRole('radio', { name: residence, exact: true }).check();
-    await this.continueBtn.click();
+
+    const residenceRadio = this.widget.getByRole('radio', { name: residence, exact: true });
+    await residenceRadio.or(this.heading("Let's find your company")).or(this.heading('Company information'))
+      .first().waitFor({ timeout: 30000 });
+    if (await residenceRadio.isVisible()) {
+      await residenceRadio.check();
+      await this.continueBtn.click();
+    }
   }
 
   // Company name, registration number and country come prefilled from signup. A test company
   // isn't in any registry, so the search finds nothing and the details are confirmed by hand.
   async confirmCompanyData({ companyName, entityType }) {
-    await expect(this.heading("Let's find your company")).toBeVisible({ timeout: 30000 });
-    await this.findCompanyBtn.click();
-    await this.enterManuallyBtn.click({ timeout: 30000 });
-
-    await expect(this.heading('Company information')).toBeVisible({ timeout: 30000 });
+    const findHeading = this.heading("Let's find your company");
+    await findHeading.or(this.heading('Company information')).first().waitFor({ timeout: 30000 });
+    if (await findHeading.isVisible()) await this.findCompanyBtn.click();
+    // What the search leads to depends on the (random) country from signup:
+    //  - straight to the "Company information" form (no registry for that country);
+    //  - a results page with "Enter company data manually";
+    //  - "No results found" in place with "Search again", which then leads to that results page.
+    // Keep stepping until the form is shown.
+    const searchAgainBtn = this.widget.getByRole('button', { name: 'Search again' });
+    const companyInfoHeading = this.heading('Company information');
+    await expect(async () => {
+      if (await companyInfoHeading.isVisible().catch(() => false)) return;
+      if (await this.enterManuallyBtn.isVisible().catch(() => false)) {
+        await this.enterManuallyBtn.click({ timeout: 5000 });
+      } else if (await searchAgainBtn.isVisible().catch(() => false)) {
+        await searchAgainBtn.click({ timeout: 5000 });
+      }
+      await expect(companyInfoHeading).toBeVisible({ timeout: 10000 });
+    }).toPass({ timeout: 90000, intervals: [2000, 5000] });
     await expect(this.companyNameInput).toHaveValue(companyName);
-    await this.entityTypeSelect.selectOption({ label: entityType });
+    // Not every form asks for it (a deal participant's doesn't).
+    if ((await this.entityTypeSelect.count()) > 0) await this.entityTypeSelect.selectOption({ label: entityType });
     await this.saveAndContinueBtn.click();
   }
 
-  // Uploads one file per document type, choosing the type in the "Document type" dropdown (a
-  // native select). A type drops out of that dropdown once a file has been uploaded for it, so a
-  // type that is neither offered nor listed there is already uploaded and is skipped.
+  // Uploads one file per document type, choosing the type under "Document type". A type drops out
+  // of the choices once a file has been uploaded for it, so a type that is already listed as
+  // uploaded, or no longer offered, is skipped.
   async uploadCompanyDocuments(documents) {
     await expect(this.heading('Company documents')).toBeVisible({ timeout: 30000 });
+    // Depending on the widget version, "Document type" is either a native select or a button
+    // that opens a "Select document type" dialog.
     const typeSelect = this.widget.locator('select[aria-label="Document type"]');
-    const typeOption = type => typeSelect.locator('option').filter({ hasText: new RegExp(`^\\s*${type}\\s*$`) });
+    const typeButton = this.widget.getByRole('button', { name: 'Document type' });
+    const typeList = this.widget.getByRole('listbox', { name: 'Select document type' });
+    const uploadedItem = type =>
+      this.widget.getByRole('listitem').filter({ hasText: new RegExp(`^\\s*${type}\\s*(Delete)?\\s*$`) });
+    await expect(typeSelect.or(typeButton).first()).toBeAttached({ timeout: 30000 });
 
     for (const { type, file } of documents) {
-      await typeSelect.waitFor({ state: 'attached', timeout: 30000 });
-      if ((await typeOption(type).count()) === 0) continue;
+      if ((await uploadedItem(type).count()) > 0) continue;
 
-      await typeSelect.selectOption({ label: type }, { force: true });
+      if ((await typeSelect.count()) > 0) {
+        const option = typeSelect.locator('option').filter({ hasText: new RegExp(`^\\s*${type}\\s*$`) });
+        if ((await option.count()) === 0) continue;
+        await typeSelect.selectOption({ label: type }, { force: true });
+        await this.fileInput.setInputFiles(path.join(process.cwd(), file));
+        await expect(option).toHaveCount(0, { timeout: 60000 });
+        continue;
+      }
+
+      // A click while the widget is still re-rendering after the previous upload can be lost, so
+      // click again until the picker shows its options.
+      await expect(async () => {
+        if (!(await typeList.getByRole('option').first().isVisible().catch(() => false))) {
+          await typeButton.click({ timeout: 5000 });
+        }
+        await expect(typeList.getByRole('option').first()).toBeVisible({ timeout: 5000 });
+      }).toPass({ timeout: 45000, intervals: [1000, 2000, 3000] });
+      const option = typeList.getByRole('option', { name: type, exact: true });
+      if ((await option.count()) === 0) {
+        await this.widget.getByRole('dialog').getByRole('button', { name: 'Close' }).click();
+        continue;
+      }
+      await option.click();
       await this.fileInput.setInputFiles(path.join(process.cwd(), file));
-      await expect(typeOption(type)).toHaveCount(0, { timeout: 60000 });
+      // The uploaded file is listed with a loading bar until Sumsub has stored it.
+      await expect(uploadedItem(type)).toBeVisible({ timeout: 30000 });
+      await expect(uploadedItem(type).getByRole('progressbar')).toHaveCount(0, { timeout: 60000 });
     }
 
     await this.continueBtn.click();
@@ -112,17 +164,69 @@ export class KybVerificationPage {
     await this.widget.getByRole('button', { name: 'Nationality Nationality' }).click();
     await this.widget.getByRole('option', { name: person.nationality, exact: true }).click();
 
-    await this.widget.getByRole('button', { name: 'Create beneficiary' }).click();
-    await expect(
-      this.widget.getByRole('heading', { name: `${person.firstName} ${person.lastName}`, level: 3 })
-    ).toBeVisible({ timeout: 30000 });
+    // Some flows (e.g. a deal participant's) also ask for gender, tax residence and an address.
+    // Choosing tax residence re-renders the form (the address fields appear only then), so keep
+    // setting whichever of these are shown and empty, and retry Create beneficiary, until it is accepted.
+    const taxResidence = this.widget.getByRole('button', { name: /Tax residence country$/ });
+    const gender = this.widget.getByRole('combobox', { name: 'Gender' });
+    const extraFields = [
+      {
+        value: person.taxResidenceCountry,
+        field: taxResidence,
+        isSet: async () => (await taxResidence.innerText()).trim() === person.taxResidenceCountry,
+        set: async () => {
+          await taxResidence.click();
+          await this.widget.getByRole('option', { name: person.taxResidenceCountry, exact: true }).click();
+        },
+      },
+      {
+        value: person.gender,
+        field: gender,
+        isSet: async () => (await gender.locator('option:checked').innerText()).trim() === person.gender,
+        set: () => gender.selectOption({ label: person.gender }),
+      },
+      ...[['Post code', person.postCode], ['City', person.city], ['State', person.state]].map(([label, value]) => {
+        const field = this.widget.getByRole('textbox', { name: label, exact: true });
+        return {
+          value,
+          field,
+          isSet: async () => (await field.inputValue()) === value,
+          // Typed like a user and then left, so the widget records the change before the next field.
+          set: async () => {
+            await field.clear();
+            await field.pressSequentially(value, { delay: 30 });
+            await field.blur();
+          },
+        };
+      }),
+    ];
+
+    const createBtn = this.widget.getByRole('button', { name: 'Create beneficiary' });
+    const addedHeading = this.widget.getByRole('heading', { name: `${person.firstName} ${person.lastName}`, level: 3 });
+    await expect(async () => {
+      if (await createBtn.isVisible().catch(() => false)) {
+        // Looked up on every pass: the address fields only appear once tax residence is chosen.
+        for (const f of extraFields) {
+          if (!f.value || (await f.field.count()) === 0 || (await f.isSet())) continue;
+          await f.set();
+          await this.page.waitForTimeout(700); // let the form re-render before the next field
+        }
+        await this.page.waitForTimeout(1000);
+        await createBtn.click({ timeout: 5000 });
+      }
+      await expect(addedHeading).toBeVisible({ timeout: 10000 });
+    }).toPass({ timeout: 120000, intervals: [1000, 2000] });
   }
 
   // Submits the company verification. Sumsub then asks every associated party to verify their
   // own identity (ID document and live selfie), which can't be done by a test.
   async submit({ trusteeCannotBeIdentified }) {
-    if (trusteeCannotBeIdentified) {
-      await this.widget.getByRole('checkbox', { name: 'Cannot be identified' }).check();
+    // Only some flows have a Trustee role to mark as "Cannot be identified" (a deal participant's
+    // asks just for UBO and Shareholder).
+    const cannotBeIdentified = this.widget.getByRole('checkbox', { name: 'Cannot be identified' });
+    await expect(this.submitBtn).toBeVisible({ timeout: 30000 });
+    if (trusteeCannotBeIdentified && (await cannotBeIdentified.count()) > 0) {
+      await cannotBeIdentified.check();
     }
     // A click straight after adding the beneficiary can be ignored while the widget is still saving,
     // so click again until it moves on.

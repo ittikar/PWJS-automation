@@ -2,31 +2,31 @@
   {
     "assetGroup": "private-equity",
     "status": "SUCCESS",
-    "dealName": "ATLAS MOMENTUM CLUB DEAL 1794294697710",
-    "timestamp": "2026-11-10T10:20:39.875Z"
+    "dealName": "ATLAS GROWTH CLUB DEAL 1794835727454",
+    "timestamp": "2026-11-16T14:04:26.996Z"
   },
   {
     "assetGroup": "real-asset",
     "status": "SUCCESS",
-    "dealName": "SUMMIT ANCHOR CLUB DEAL 1794294718108",
-    "timestamp": "2026-11-10T10:20:39.877Z"
+    "dealName": "NOVA GROWTH CLUB DEAL 1794835812080",
+    "timestamp": "2026-11-16T14:04:26.996Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "status": "SUCCESS",
-    "dealName": "ZENITH LEGACY CLUB DEAL 1794294737225",
-    "timestamp": "2026-11-10T10:20:39.877Z"
+    "dealName": "VERTEX YIELD CLUB DEAL 1794835894153",
+    "timestamp": "2026-11-16T14:04:26.996Z"
   },
   {
     "assetGroup": "private-credit",
     "status": "SUCCESS",
-    "dealName": "VERTEX ANCHOR CLUB DEAL 1794294755709",
-    "timestamp": "2026-11-10T10:20:39.877Z"
+    "dealName": "VERTEX FRONTIER CLUB DEAL 1794832971552",
+    "timestamp": "2026-11-16T14:04:26.996Z"
   },
   {
     "assetGroup": "other-alternatives",
     "status": "SUCCESS",
-    "dealName": "VERTEX FRONTIER CLUB DEAL 1794294773552",
-    "timestamp": "2026-11-10T10:20:39.877Z"
+    "dealName": "HORIZON ANCHOR CLUB DEAL 1794833056585",
+    "timestamp": "2026-11-16T14:04:26.996Z"
   }
 ]

@@ -135,6 +135,17 @@ export class DealSearchPage {
   // Confirms one asset group's draft + submitted pair: the draft must be listed as Draft, and
   // the submitted deal must be listed with any status past Draft (it moves on through due
   // diligence to Published on its own, so the exact status depends on timing).
+  // A single submitted deal: listed under the asset group with a non-draft status.
+  async verifySubmittedDeal(listingUrl, name) {
+    const deal = await this.findDeal(listingUrl, name);
+    let error;
+    if (!deal.found) error = `submitted "${name}" not found in ${listingUrl}`;
+    else if (!deal.status || deal.status === 'Draft') {
+      error = `submitted "${name}" has status "${deal.status}", expected a non-draft status`;
+    }
+    return { ok: !error, status: deal.found ? deal.status : 'NOT FOUND', error };
+  }
+
   async verifyDealPair(listingUrl, { draftName, submittedName }) {
     const draft = await this.findDeal(listingUrl, draftName);
     const submitted = await this.findDeal(listingUrl, submittedName);

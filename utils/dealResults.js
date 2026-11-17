@@ -72,10 +72,18 @@ export function logCreatedDeals(fileName) {
   const results = JSON.parse(fs.readFileSync(finalFilePathFor(fileName), 'utf8'));
   const dealType = results[0]?.dealType ?? fileName.replace(/Results\.json$/, '');
 
-  const lines = [`${dealType}: all ${results.length * 2} deals created`];
+  // Club deals also record a deal with a participant (TC-REG-168).
+  const dealCount = results.reduce((n, r) => n + 2 + (r.participantDealName ? 1 : 0), 0);
+  const lines = [`${dealType}: all ${dealCount} deals created`];
   for (const r of results) {
     lines.push(`  ${r.assetGroup.padEnd(20)}Draft:     ${r.draftName}`);
     lines.push(`  ${''.padEnd(20)}Submitted: ${r.submittedName}`);
+    if (r.participantDealName) {
+      lines.push(
+        `  ${''.padEnd(20)}With participant: ${r.participantDealName} ` +
+          `(participant "${r.participantCompany}", ${r.participantKybStatus}, Sumsub ${r.participantApplicantId})`
+      );
+    }
   }
   console.log(lines.join('\n'));
 }

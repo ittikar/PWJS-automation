@@ -48,7 +48,8 @@ export async function sumsubRequest(request, method, pathWithQuery, payload) {
 }
 
 export function approveApplicant(request, applicantId) {
-  return sumsubRequest(request, 'POST', `/resources/applicants/${applicantId}/-/approve`);
+  // Sumsub rejects this call without a body ("The request body must not be null"); {} is enough.
+  return sumsubRequest(request, 'POST', `/resources/applicants/${applicantId}/-/approve`, {});
 }
 
 export function getApplicant(request, applicantId) {

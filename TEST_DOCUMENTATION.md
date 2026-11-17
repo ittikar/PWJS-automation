@@ -23,6 +23,7 @@ All tests run against the SIT environment: `https://sit-ireland-dashboard.ittika
 5. [Page objects and helpers](#5-page-objects-and-helpers)
 6. [App behaviour the tests work around](#6-app-behaviour-the-tests-work-around)
 7. [Known issues and open items](#7-known-issues-and-open-items)
+8. [API tests (`api-tests/`)](#8-api-tests-api-tests)
 
 ---
 
@@ -53,6 +54,8 @@ TC-REG-168  club deals      ┘
 
 TC-REG-111 (inviting users) is standalone.
 
+**API tests.** `api-tests/` covers the same features by calling the backend directly, without a browser, using the deal-chain accounts. See [section 8](#8-api-tests-api-tests).
+
 The five asset groups used by every deal test are Private Equity, Real Asset, Secondary & Pre-IPO, Private Credit, and Other Alternatives.
 
 ## 2. Running the tests
@@ -64,8 +67,9 @@ Run tests that share an account **one at a time** (`--workers=1`). The Playwrigh
 | New-user chain | `npx playwright test tests/TC-REG-001.spec.js tests/TC-REG-033.spec.js tests/TC-REG-044.spec.js tests/TC-REG-074.spec.js --project=chromium --workers=1` |
 | Deal chain | `npx playwright test tests/TC-REG-134.spec.js tests/TC-REG-146.spec.js tests/TC-REG-168.spec.js tests/TC-REG-203.spec.js tests/TC-REG-217.spec.js --project=chromium --workers=1` |
 | One test, visible browser | `npx playwright test tests/TC-REG-217.spec.js --project=chromium --headed` |
-| `npm run suite` | Runs 001 → 033 → 044 → 074 → 111 → 134 → 146 → 168 in that order, headed, one at a time, with no retries. TC-REG-001 waits for you to enter the OTP. |
+| `npm run suite` | Runs every `.spec.js` file in `tests/`, headed, one at a time, with no retries. They run in file-name order: 001 → 033 → 044 → 074 → 111 → 134 → 146 → 168 → 203 → 217. A new spec file is picked up automatically. TC-REG-001 waits for you to enter the OTP. |
 | `npm run regression` | Runs 001, 033, 044, 074, 111, 134, 146 and 168 headed, one worker, one retry. It does **not** include 203 or 217. |
+| `npm run api` | Runs every API test in `api-tests/` (no browser), one at a time. About 4–5 minutes. See [section 8](#8-api-tests-api-tests). |
 | HTML report | `npx playwright show-report` |
 
 Files run in alphabetical order with one worker, so the commands above keep the chains in sequence.
@@ -80,8 +84,8 @@ Files run in alphabetical order with one worker, so the commands above keep the 
 |---|---|---|---|
 | Newly generated `user<timestamp>@yopmail.com` | Newly generated | 001, then 033, 044, 074 | Created by TC-REG-001 and saved to `signupResults.json` |
 | `sasottijotro-8363@yopmail.com` | (Root user) | 111 | Hard-coded in `TC-REG-111.spec.js` |
-| Deal owner (currently `frixoqueiraubri-2909@yopmail.com`) | Gruppo Barletta Pvt Ltd | 134, 146, 168, 203, and owner in 217 | `test-data/dealUser.json` |
-| Data room requester (currently `youyejoufrola-9251@yopmail.com`) | Youyejoufrola Pvt Ltd | Requester in 217 | `test-data/dataRoomRequester.json` |
+| Deal owner (currently `hilloummausimou-7060@yopmail.com`) | Mausimou technologies Pvt Ltd | 134, 146, 168, 203, owner in 217, and the API tests | `test-data/dealUser.json` |
+| Data room requester (currently `youyejoufrola-9251@yopmail.com`) | Youyejoufrola Pvt Ltd | Requester in 217, API-001, API-007 and API-008 | `test-data/dataRoomRequester.json` |
 
 To switch the deal tests to another account, edit the email and password in `test-data/dealUser.json`. The account must be onboarded, or it can't create deals. In TC-REG-217 the requester must belong to a **different organisation** from the owner; the test stops immediately if both files hold the same email.
 
@@ -91,16 +95,16 @@ To switch the deal tests to another account, edit the email and password in `tes
 |---|---|---|
 | `signupData.json` | Read by 001 | Fixed signup values: first/last name, password, org name, registration number, country. Email, org name, registration number and country are overridden with generated values. |
 | `signupResults.json` | Written by 001; read by 033, 044, 074 | The last signup: email, password, organisation details, `status`. Later tests use the most recent entry with `status: "SUCCESS"`. |
-| `dealUser.json` | Read by 134, 146, 168, 203, 217 | Deal owner login. |
-| `dataRoomRequester.json` | Read by 217 | Data room requester login. |
-| `kybData.json` | Read by 074 | What to enter in the company verification widget: residence option, entity type, the document file for each document type, and the beneficiary's details. |
+| `dealUser.json` | Read by 134, 146, 168, 203, 217 and the API tests | Deal owner login. |
+| `dataRoomRequester.json` | Read by 217 and the API tests | Data room requester login. |
+| `kybData.json` | Read by 074, 168 and API-005 | What to enter in the company verification (Sumsub) widget: residence option, entity type, the document file for each document type, and the beneficiary's details. The beneficiary includes gender, tax residence and address, which only the club deal participant's form asks for. Also `participant`: the club deal participant's company name prefix, country (India) and registration number prefix, which a 6-digit stamp completes as a valid CIN. |
 | `portfolioResults.json` | Written by 134 | Per asset group: draft name, submitted name, statuses seen in the UI, and the error if any. |
 | `opportunityResults.json` | Written by 146 | Same, for opportunities. |
-| `clubDealResults.json` | Written by 168 | Same, for club deals. |
+| `clubDealResults.json` | Written by 168 | Same, for club deals, plus the deal with a participant: its name and status, the participant company, Sumsub applicant ID and participant status. |
 | `dueDiligenceResults.json` | Written by 203 | Per deal type and asset group: the deal due diligence was started on, or why it was skipped or failed. |
 | `dataRoomRequestResults.json` | Written by 217 | Per asset group: the club deal whose data room was requested and approved, or why it was skipped or failed. |
 
-The `dataroom/` folder holds sample PDF files. The deal tests upload two of them at random to each submitted deal's data room.
+The `dataroom/` folder holds sample PDF files. The deal tests (UI and API) upload two of them at random to each submitted deal's data room.
 
 ---
 
@@ -267,11 +271,11 @@ The same flow as TC-REG-134, for opportunities:
 
 ### TC-REG-168: Create club deals in every asset group
 
-**File:** `tests/TC-REG-168.spec.js` · **Account:** `dealUser.json` · **Timeout:** 10 min
+**File:** `tests/TC-REG-168.spec.js` · **Account:** `dealUser.json` · **Timeout:** 30 min · **Needs:** `SUMSUB_APP_TOKEN` and `SUMSUB_SECRET_KEY` in `.env`
 
-The same overall flow as TC-REG-134, for club deals. The club deal form and steps differ:
+The same overall flow as TC-REG-134, for club deals, but with **three** club deals per asset group (15 in all): a draft, a submitted deal without participants, and a submitted deal with a participant verified in Sumsub. The club deal form and steps differ:
 
-**Deal details (both deals):**
+**Deal details (all three deals):**
 - Name such as "Pinnacle Frontier Club Deal 1793613804246".
 - Asset Class (waiting for the group's own list, as above) and a random Sector.
 - **Target investment amount:** a random whole number of millions from $5M to $99M.
@@ -286,9 +290,37 @@ The same overall flow as TC-REG-134, for club deals. The club deal form and step
 2. Click **Skip & Continue**.
 3. Upload two random PDFs, click **Submit**, check "Submit deal?", then "Your deal has been submitted successfully."
 
-**UI check:** both deals are searched in `/deals/<group>/club-deal`, with the same status rules as TC-REG-134.
+**Deal with a participant**, in every asset group. This takes about 1.5 minutes per group.
 
-**Output:** `test-data/clubDealResults.json`.
+1. Create a club deal (same details as above) and click **Save & Continue**.
+2. On **People and Organisations**, click **Add People and Organisations** and enter the participant from `kybData.json` → `participant`:
+   - **Company Name:** "QA Participant Co <timestamp>".
+   - **Country:** India.
+   - **Registration No:** a valid Indian CIN, made from the prefix `U72900KA2015PTC` plus 6 digits. Sumsub checks the format for India.
+   - Check that the participant is saved with status **KYB_PENDING** ("KYB Pending" on the page). Then click **Continue**.
+3. Upload two PDFs, **Submit**, then **OK** on "Submit deal?".
+4. "Would you like to verify the participant now?" → **Yes**. This opens the participant's Sumsub company verification at `/deals/launch-kyc`, and the test captures the applicant ID from `websdkInit`.
+5. Fill the widget with the same steps and data as TC-REG-074. Differences in this flow:
+   - There's no country-of-residence screen.
+   - There's no "Type of entity" field.
+   - The beneficiary also needs Gender, Tax residence country, Post code, City and State.
+   - There's no Trustee role.
+6. **Sumsub check:**
+   - The applicant's `externalUserId` is the participant's ID and its company name matches.
+   - Approve it through the API, then check that the review answer is **GREEN**.
+7. **App check:** the participant is linked to that applicant (`complianceProviderId`) and its status is **KYB_SUBMITTED**. The test reads this by replaying the app's own participants call. The app keeps showing KYB_SUBMITTED after approval, because Sumsub still waits for the beneficiary's own identity check.
+
+**UI check:** all three deals are searched in `/deals/<group>/club-deal`.
+- The draft must have status Draft.
+- Both submitted deals, with and without the participant, must have a status other than Draft.
+
+**Result per asset group:** the group counts as SUCCESS only if all three deals were created and found, and the participant checks above passed. If one part fails, the others are still attempted, and the error names the part that failed.
+
+**Output:** `test-data/clubDealResults.json`. Each entry has the draft and submitted names and statuses, plus:
+- `participantDealName` and `participantDealStatus`.
+- `participantCompany`, `participantApplicantId` and `participantKybStatus`.
+
+When all 5 groups succeed, the log lists all 15 deals.
 
 ---
 
@@ -372,11 +404,11 @@ If none of the owner's Published club deals in a group can still be requested, t
 | `organisationspage.page.js` | Organisations | ROOT role and NOT ONBOARDED badges |
 | `userspage.page.js` | Users | Add a user with a role and check the success message |
 | `onboardingchatpage.page.js` | Itti chat (onboarding) | Start self-service onboarding, nudge Itti until the AUM form appears, fill in and save AUM, confirm and submit |
-| `dealformpage.page.js` | Deal create forms | Fill portfolio/opportunity or club deal details, choose the group's asset class, save draft, save and continue, skip participants, upload files, submit, dismiss dialogs, confirm the saved asset group |
-| `dealsearchpage.page.js` | Deal search (all three types) | Open the search scoped to an asset group, find a deal by name and read its status, find Published deals (or only the account's own), open a deal, check a draft/submitted pair |
+| `dealformpage.page.js` | Deal create forms | Fill portfolio/opportunity or club deal details, choose the group's asset class, save draft, save and continue, skip participants or add a participant organisation and continue, upload files, submit, dismiss dialogs, confirm the saved asset group |
+| `dealsearchpage.page.js` | Deal search (all three types) | Open the search scoped to an asset group, find a deal by name and read its status, find Published deals (or only the account's own), open a deal, check a draft/submitted pair or a single submitted deal |
 | `dealviewpage.page.js` | A deal's own page | Run due diligence and confirm it started; request data room access |
 | `dataroomrequestspage.page.js` | Data Room Requests | Switch between Received and Sent, approve a request, wait for a row's status |
-| `kybverificationpage.page.js` | Company verification (Sumsub widget) | Accept the intro and residence, confirm company data, upload company documents, add an individual beneficiary, submit |
+| `kybverificationpage.page.js` | Company verification (Sumsub widget) | Confirm the AUM Details step if shown, accept the intro (and residence, if asked), get past the company search whichever way it goes, confirm company data, upload company documents with either type picker, add an individual beneficiary (with address fields if asked), and submit. Used for the organisation (074) and for club deal participants (168). |
 
 ### Helpers (`utils/`)
 
@@ -388,7 +420,7 @@ If none of the owner's Published club deals in a group can still be requested, t
 | `jsonWriter.js` | Writes the signup result to `signupResults.json` |
 | `dealForm.js` | Picks random PDFs from `dataroom/` |
 | `sumsubApi.js` | Signed calls to the Sumsub API: approve an applicant, read an applicant's review status. Needs `SUMSUB_APP_TOKEN` and `SUMSUB_SECRET_KEY` in `.env`. |
-| `dealResults.js` | Records each asset group's deal result, merges them into the results file, and fails with the list of groups that didn't succeed |
+| `dealResults.js` | Records each asset group's deal result, merges them into the results file, fails with the list of groups that didn't succeed, and logs every created deal once all groups succeed |
 
 ---
 
@@ -416,3 +448,69 @@ If none of the owner's Published club deals in a group can still be requested, t
 5. **TC-REG-001 records the username as `undefined_<timestamp>`.** `signupData.json` has no `username` field. This is only used for logging and the results file.
 6. **`npm run regression` doesn't include TC-REG-203 or TC-REG-217.**
 7. **Older deals with generic asset classes.** Deals created before the asset-class fix (around 2 November) have classes like "Special Situations" that belong to no group's list. Their pages show no asset group in the breadcrumb.
+
+---
+
+## 8. API tests (`api-tests/`)
+
+The same features as the UI suite, tested by calling the backend directly, with no browser. They run as their own Playwright project, `api`. Specs are named `*.api.spec.js`.
+
+**Run:** `npm run api`, or one file with `npx playwright test --project=api api-tests/API-005-club-deals.api.spec.js`.
+
+**Needs:**
+- The accounts in `test-data/dealUser.json` and `test-data/dataRoomRequester.json`.
+- `SUMSUB_APP_TOKEN` and `SUMSUB_SECRET_KEY` in `.env` for the participant tests in API-005.
+
+**Not covered:**
+- Signup, because the emailed code can't be read automatically.
+- The AUM onboarding step, because it's driven by the Itti chat, not by an endpoint.
+
+These stay UI-only (TC-REG-001 and TC-REG-074).
+
+### How the tests log in
+
+`api-tests/helpers/apiClient.js` signs in the same way the dashboard does:
+1. A Cognito password login (`USER_PASSWORD_AUTH`) returns an ID token and an access token.
+2. `GET /app-metadata` is called with `session-token` set to base64 of `{"id_token", "access_token"}`. It returns the session token (the access token) and the user's organisations.
+3. `POST /preferences/login` is called with `{org_ref_id}`. Until this step, every call is refused with 403.
+4. Every later call sends two headers: `session-token: <access token>` and `redirect-uri: https://sit-ireland-dashboard.ittikar.com/auth`. The token lasts 3 hours.
+
+**Writes:** every POST and PATCH needs a new `x-idempotency-key` header. Without it the backend returns 400 `VALIDATION_ERROR`. The client adds one automatically.
+
+**Documents** are stored in a separate document service (`mondevo-connect.dms.ittikar.com`). `GET …/<id>/session` gives a token for that deal's data room, plus the groups allowed to read and own its files. Uploading one file takes three calls:
+1. Create a dossier in a data room category folder.
+2. Upload the content (`x-s3-config-id: ireland`, so the file goes to the Ireland bucket).
+3. File a "sheet" that links the two.
+
+All of this is in `helpers/dataRoom.js`.
+
+### Files
+
+| File | Scenarios |
+|---|---|
+| `API-001-auth` | Both accounts log in and read their profile (onboarded organisation, root/admin role). Refused cases: a wrong password, no session token, a made-up token, and a write without an idempotency key. |
+| `API-002-reference-data` | Each module (portfolio, opportunity, club deal) lists all 5 asset groups, each with its own unique asset classes, plus sectors and nature of deal. Also club deal settlement types and statuses, portfolio and opportunity statuses, organisation types and onboarding statuses, and the product hierarchy. |
+| `API-003-portfolios` | In every asset group: a draft is saved in the right group and listed as DRAFT. A second deal is created, its data room opened, 2 PDFs uploaded and listed, marked submittable, and submitted (SUBMITTED, then listed with a non-draft status). Submitting before the data room is opened is refused (422). |
+| `API-004-opportunities` | The same as API-003, for opportunities. |
+| `API-005-club-deals` | In every asset group there are three deals. **Draft.** **Submitted without participants.** **Submitted with a participant:** the participant is added as KYB_PENDING, and launching its KYB before submitting is refused (422). After submitting, `launch-kyc` creates the Sumsub company applicant, the app links the participant to it, and the test approves it in Sumsub (GREEN). The app then shows **KYB_PROVIDER_APPROVED**. Also: a participant without a company name or registration number is refused. |
+| `API-006-due-diligence` | For portfolios and opportunities in every asset group: take one of the deal user's own Published deals that can run due diligence, and start it (`DD_RUN_STARTED`). The deal then reports `DD_IN_PROGRESS` with the active run, the timeline shows DD started, and a second start is refused (409). On a draft, due diligence is blocked (`NOT_PUBLISHED`, 404). |
+| `API-007-dataroom-requests` | In every asset group: the requester asks to see one of the deal user's Published club deals that it hasn't requested before (PENDING). A second request for the same deal is refused. The owner sees the request in Received and approves it, and both sides then see it APPROVED. |
+| `API-008-organisation-and-listings` | Both organisations list their user as an active member. The own-deal listings work for club deals, portfolios and opportunities, as do other organisations' deals and the asset class stats. For a Published club deal: its details, its status timeline from DRAFT to PUBLISHED, and that the requester can view it but can't submit it. |
+
+**Helpers** in `api-tests/helpers/`:
+- `apiClient.js`: login and the session.
+- `dataRoom.js`: opening the data room, uploading and listing documents.
+- `deals.js`: create payloads from the reference data, creating drafts, submitting, and searching the user's own deals.
+- `dealLifecycleTests.js`: the shared portfolio and opportunity scenarios.
+- `testData.js`: the accounts and data files.
+
+### Things to know
+
+- **Deal names start with "API"**, e.g. "API PORTFOLIO 1794896382128872", so these deals can be told apart from the UI tests' deals. The backend stores names in capitals.
+- **Each run creates deals on SIT:**
+  - 10 portfolios, 10 opportunities and 15 club deals, plus a few drafts from the negative tests.
+  - 5 Sumsub applicants.
+  - Data room requests for 5 Published club deals, which can't be undone.
+- **Running due diligence and data room requests uses up deals.** API-006 and API-007 need deals that were submitted about 15 minutes earlier and are now Published. If a group has none left, its test fails and names what was missing. Running TC-REG-168 or API-005 creates new ones.
+- **A participant reaches a different status than in the UI.** Approving through the API gives KYB_PROVIDER_APPROVED. In the UI flow, filling the widget leaves it at KYB_SUBMITTED, because Sumsub then waits for the beneficiary's own ID and selfie check.
+
