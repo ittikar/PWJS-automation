@@ -3,70 +3,70 @@
     "dealType": "portfolio",
     "assetGroup": "private-equity",
     "status": "SUCCESS",
-    "dealName": "PINNACLE INCOME PORTFOLIO 1794835518722",
-    "timestamp": "2026-11-16T14:02:06.145Z"
+    "dealName": "ZENITH GROWTH PORTFOLIO 1794919663836",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "portfolio",
     "assetGroup": "real-asset",
     "status": "SUCCESS",
-    "dealName": "MERIDIAN COMPASS PORTFOLIO 1794835538459",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "HORIZON YIELD PORTFOLIO 1794919684935",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "portfolio",
     "assetGroup": "secondary-pre-ipo",
     "status": "SUCCESS",
-    "dealName": "PINNACLE ANCHOR PORTFOLIO 1794835555557",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "ZENITH GROWTH PORTFOLIO 1794919704220",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "portfolio",
     "assetGroup": "private-credit",
     "status": "SUCCESS",
-    "dealName": "ZENITH INCOME PORTFOLIO 1794835573779",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "VERTEX GROWTH PORTFOLIO 1794919724150",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "portfolio",
     "assetGroup": "other-alternatives",
     "status": "SUCCESS",
-    "dealName": "SUMMIT COMPASS PORTFOLIO 1794835590831",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "PINNACLE YIELD PORTFOLIO 1794919743769",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "opportunity",
     "assetGroup": "private-equity",
     "status": "SUCCESS",
-    "dealName": "VERTEX INCOME OPPORTUNITY 1794835621063",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "GRANITE COMPASS OPPORTUNITY 1794919774202",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "opportunity",
     "assetGroup": "real-asset",
     "status": "SUCCESS",
-    "dealName": "GRANITE COMPASS OPPORTUNITY 1794835639834",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "ZENITH FRONTIER OPPORTUNITY 1794919792288",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "opportunity",
     "assetGroup": "secondary-pre-ipo",
     "status": "SUCCESS",
-    "dealName": "MERIDIAN MOMENTUM OPPORTUNITY 1794835658571",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "ATLAS YIELD OPPORTUNITY 1794919809734",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "opportunity",
     "assetGroup": "private-credit",
     "status": "SUCCESS",
-    "dealName": "MERIDIAN ANCHOR OPPORTUNITY 1794835677187",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "ZENITH COMPASS OPPORTUNITY 1794919827302",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   },
   {
     "dealType": "opportunity",
     "assetGroup": "other-alternatives",
     "status": "SUCCESS",
-    "dealName": "ATLAS MOMENTUM OPPORTUNITY 1794835695495",
-    "timestamp": "2026-11-16T14:02:06.147Z"
+    "dealName": "ZENITH LEGACY OPPORTUNITY 1794919844320",
+    "timestamp": "2026-11-17T12:58:44.202Z"
   }
 ]

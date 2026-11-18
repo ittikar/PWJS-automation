@@ -3,50 +3,50 @@
     "assetGroup": "private-equity",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Compass Opportunity 1794837177859",
-    "submittedName": "Pinnacle Anchor Opportunity 1794837181805",
+    "draftName": "Meridian Frontier Opportunity 1794919769944",
+    "submittedName": "Granite Compass Opportunity 1794919774202",
     "draftStatus": "Draft",
     "submittedStatus": "Setting Up Data Room",
-    "timestamp": "2026-11-16T13:53:17.563Z"
+    "timestamp": "2026-11-17T12:49:48.544Z"
   },
   {
     "assetGroup": "real-asset",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Vertex Income Opportunity 1794837197564",
-    "submittedName": "Granite Growth Opportunity 1794837200611",
+    "draftName": "Horizon Growth Opportunity 1794919788545",
+    "submittedName": "Zenith Frontier Opportunity 1794919792288",
     "draftStatus": "Draft",
     "submittedStatus": "Setting Up Data Room",
-    "timestamp": "2026-11-16T13:53:35.287Z"
+    "timestamp": "2026-11-17T12:50:06.769Z"
   },
   {
     "assetGroup": "secondary-pre-ipo",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Growth Opportunity 1794837215288",
-    "submittedName": "Atlas Income Opportunity 1794837218580",
+    "draftName": "Meridian Legacy Opportunity 1794919806769",
+    "submittedName": "Atlas Yield Opportunity 1794919809734",
     "draftStatus": "Draft",
     "submittedStatus": "Setting Up Data Room",
-    "timestamp": "2026-11-16T13:53:53.111Z"
+    "timestamp": "2026-11-17T12:50:23.595Z"
   },
   {
     "assetGroup": "private-credit",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Granite Yield Opportunity 1794837233111",
-    "submittedName": "Summit Frontier Opportunity 1794837236263",
+    "draftName": "Atlas Growth Opportunity 1794919823596",
+    "submittedName": "Zenith Compass Opportunity 1794919827302",
     "draftStatus": "Draft",
     "submittedStatus": "Setting Up Data Room",
-    "timestamp": "2026-11-16T13:54:10.953Z"
+    "timestamp": "2026-11-17T12:50:40.631Z"
   },
   {
     "assetGroup": "other-alternatives",
     "dealType": "opportunity",
     "status": "SUCCESS",
-    "draftName": "Atlas Compass Opportunity 1794837250953",
-    "submittedName": "Summit Anchor Opportunity 1794837254779",
+    "draftName": "Granite Compass Opportunity 1794919840632",
+    "submittedName": "Zenith Legacy Opportunity 1794919844320",
     "draftStatus": "Draft",
     "submittedStatus": "Setting Up Data Room",
-    "timestamp": "2026-11-16T13:54:29.955Z"
+    "timestamp": "2026-11-17T12:50:58.297Z"
   }
 ]
