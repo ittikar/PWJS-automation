@@ -1,9 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { API_BASE_URL, login } from './helpers/apiClient';
+import { API_BASE_URL, REDIRECT_URI, login } from './helpers/apiClient';
 import { DEAL_USER, DATA_ROOM_REQUESTER } from './helpers/testData';
 import { dealPayload } from './helpers/deals';
 
-const REDIRECT_URI = 'https://sit-ireland-dashboard.ittikar.com/auth';
 
 test.describe('API-001 login and session', () => {
   for (const [label, user] of [['deal user', DEAL_USER], ['data room requester', DATA_ROOM_REQUESTER]]) {

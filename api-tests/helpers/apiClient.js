@@ -1,13 +1,28 @@
 import { expect } from '@playwright/test';
 import crypto from 'crypto';
 
-// Ittikar SIT backend, called directly (no browser).
-export const API_BASE_URL = 'https://c2zr8ds89i.execute-api.eu-west-1.amazonaws.com/sit/v1/dashboard';
-const REDIRECT_URI = 'https://sit-ireland-dashboard.ittikar.com/auth';
+// The Ittikar backend, called directly (no browser). ITTI_ENV picks the environment (sit by default).
+const ENVIRONMENTS = {
+  sit: {
+    apiBaseUrl: 'https://c2zr8ds89i.execute-api.eu-west-1.amazonaws.com/sit/v1/dashboard',
+    redirectUri: 'https://sit-ireland-dashboard.ittikar.com/auth',
+    cognitoClientId: '7uli8ahgv0cphen9k6h64augg8',
+  },
+  dev: {
+    apiBaseUrl: 'https://qf6h60vgzc.execute-api.eu-west-1.amazonaws.com/dev/v1/dashboard',
+    redirectUri: 'https://dev-ireland-dashboard.ittikar.com/auth',
+    cognitoClientId: '2m6q80ld1go9u2ohg30n7q6sv8',
+  },
+};
+export const ITTI_ENV = process.env.ITTI_ENV || 'sit';
+const ENV = ENVIRONMENTS[ITTI_ENV];
+if (!ENV) throw new Error(`Unknown ITTI_ENV "${ITTI_ENV}". Use one of: ${Object.keys(ENVIRONMENTS).join(', ')}`);
+export const API_BASE_URL = ENV.apiBaseUrl;
+export const REDIRECT_URI = ENV.redirectUri;
 
 // The dashboard's Cognito app client, which allows a plain username/password login.
 const COGNITO_URL = 'https://cognito-idp.eu-west-1.amazonaws.com/';
-const COGNITO_CLIENT_ID = '7uli8ahgv0cphen9k6h64augg8';
+const COGNITO_CLIENT_ID = ENV.cognitoClientId;
 
 // Signs in the way the dashboard does, then returns an ApiSession for that user:
 //  1. Cognito password login -> ID and access tokens.
@@ -25,7 +40,9 @@ export async function login(request, { email, password }, { orgRefId } = {}) {
     data: JSON.stringify({
       AuthFlow: 'USER_PASSWORD_AUTH',
       ClientId: COGNITO_CLIENT_ID,
-      AuthParameters: { USERNAME: email, PASSWORD: password },
+      // The Cognito username is the SHA-256 of the lowercased email, as the app's own sign-in sends
+      // it (itti-revamped computeUserId). Logging in by email only works where the email is verified.
+      AuthParameters: { USERNAME: cognitoUsername(email), PASSWORD: password },
     }),
   });
   const cognitoBody = await cognito.json();
@@ -41,14 +58,20 @@ export async function login(request, { email, password }, { orgRefId } = {}) {
   expect(metaResponse.status(), 'GET /app-metadata').toBe(200);
   const meta = await metaResponse.json();
 
+  // Without an explicit org, prefer an onboarded (APPROVED) one, as the app's sign-in does: a user
+  // can also belong to draft organisations, which may only read deals.
   const organisation = orgRefId
     ? meta.organisations.find(o => o.org_ref_id === orgRefId)
-    : meta.organisations[0];
+    : meta.organisations.find(o => o.org_onboarding_status === 'APPROVED') ?? meta.organisations[0];
   if (!organisation) throw new Error(`${email} has no organisation${orgRefId ? ` ${orgRefId}` : ''}`);
 
   const session = new ApiSession(request, { email, sessionToken: meta.sessionToken, organisation, organisations: meta.organisations });
   await session.post('/preferences/login', { org_ref_id: organisation.org_ref_id }, { expectStatus: 200 });
   return session;
+}
+
+function cognitoUsername(email) {
+  return crypto.createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
 }
 
 // A signed-in user. Paths are relative to API_BASE_URL (e.g. '/profile'), or absolute URLs.

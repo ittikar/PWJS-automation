@@ -6,8 +6,15 @@ function readJson(...parts) {
 }
 
 // The same accounts as the UI tests: change them in test-data/.
-export const DEAL_USER = readJson('test-data', 'dealUser.json');
-export const DATA_ROOM_REQUESTER = readJson('test-data', 'dataRoomRequester.json');
+// Accounts can be overridden from the environment (e.g. .env), to run against another stage.
+function account(file, prefix) {
+  const fromFile = readJson('test-data', file);
+  const email = process.env[`${prefix}_EMAIL`];
+  const password = process.env[`${prefix}_PASSWORD`];
+  return email && password ? { ...fromFile, email, password } : fromFile;
+}
+export const DEAL_USER = account('dealUser.json', 'DEAL_USER');
+export const DATA_ROOM_REQUESTER = account('dataRoomRequester.json', 'DATA_ROOM_REQUESTER');
 export const KYB_DATA = readJson('test-data', 'kybData.json');
 
 export const ASSET_GROUP_SLUGS = ['private-equity', 'real-asset', 'secondary-pre-ipo', 'private-credit', 'other-alternatives'];
