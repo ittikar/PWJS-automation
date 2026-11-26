@@ -457,6 +457,8 @@ The same features as the UI suite, tested by calling the backend directly, with 
 
 **Run:** `npm run api`, or one file with `npx playwright test --project=api api-tests/API-005-club-deals.api.spec.js`.
 
+**Environment:** SIT by default. `ITTI_ENV=dev npm run api` calls dev instead (its API, redirect address and Cognito app client). The accounts in `test-data/` are SIT accounts, so for dev set `DEAL_USER_EMAIL`/`DEAL_USER_PASSWORD` (and the `DATA_ROOM_REQUESTER_*` pair) in `.env` or the environment. See `.env.example`.
+
 **Needs:**
 - The accounts in `test-data/dealUser.json` and `test-data/dataRoomRequester.json`.
 - `SUMSUB_APP_TOKEN` and `SUMSUB_SECRET_KEY` in `.env` for the participant tests in API-005.
@@ -470,8 +472,8 @@ These stay UI-only (TC-REG-001 and TC-REG-074).
 ### How the tests log in
 
 `api-tests/helpers/apiClient.js` signs in the same way the dashboard does:
-1. A Cognito password login (`USER_PASSWORD_AUTH`) returns an ID token and an access token.
-2. `GET /app-metadata` is called with `session-token` set to base64 of `{"id_token", "access_token"}`. It returns the session token (the access token) and the user's organisations.
+1. A Cognito password login (`USER_PASSWORD_AUTH`) returns an ID token and an access token. The username is the SHA-256 of the lowercased email, as the app's own sign-in sends it; logging in with the email itself only works where the email is verified.
+2. `GET /app-metadata` is called with `session-token` set to base64 of `{"id_token", "access_token"}`. It returns the session token (the access token) and the user's organisations. Unless a test asks for a specific organisation, the first APPROVED (onboarded) one is used: a user can also belong to draft organisations, which may only read deals.
 3. `POST /preferences/login` is called with `{org_ref_id}`. Until this step, every call is refused with 403.
 4. Every later call sends two headers: `session-token: <access token>` and `redirect-uri: https://sit-ireland-dashboard.ittikar.com/auth`. The token lasts 3 hours.
 
